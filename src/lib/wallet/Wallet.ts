@@ -98,9 +98,9 @@ class Wallet {
         }
     }
 
-    async signMessage() {
+    async signMessage(token: string) {
         try {
-            const message = "Please sign this message for proof of address ownership.";
+            const message = token;
             const data = new TextEncoder().encode(message);
             const signed = await this.wallet.sign(data, 'hex');
             console.log('Got signature: ' + signed.signature);

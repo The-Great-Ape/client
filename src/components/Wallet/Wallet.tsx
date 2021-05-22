@@ -3,7 +3,11 @@ import Button from '@material-ui/core/Button';
 import Wallet from '../../lib/wallet/Wallet';
 import './Wallet.css';
 
-export default function Header() {
+type WalletProps = {
+    token: string;
+}
+
+export default function (props: WalletProps) {
     const [wallet, setWallet] = useState<Wallet | null>();
     
     // useEffect(() => {
@@ -24,7 +28,7 @@ export default function Header() {
                 <div>
                     <p>Wallet address: {wallet.publicKey.toBase58()} {wallet && wallet.isConnected ? "true" : "false"}</p>
                     <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.sendTransaction()}>Send Transaction</Button>
-                    <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.signMessage()}>Sign Message</Button>
+                    <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.signMessage(props.token)}>Sign Message</Button>
                     <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.disconnect()}>Disconnect</Button>
                 </div>
             ) : (
