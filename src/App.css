@@ -1,0 +1,23 @@
+.App {
+  text-align: center;
+}
+
+body{
+  background-color: rgb(26, 33, 56) !important;
+}
+
+.main {
+  text-align:center;
+}
+
+.main {
+  margin-top:100px;
+}
+
+.logo {
+  height: 40vmin;
+}
+
+.button {
+  margin:15px 15px !important;
+}
