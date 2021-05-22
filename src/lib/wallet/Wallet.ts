@@ -104,6 +104,20 @@ class Wallet {
             const data = new TextEncoder().encode(message);
             const signed = await this.wallet.sign(data, 'hex');
             console.log('Got signature: ' + signed.signature);
+            const response = await fetch('/validate-signature', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    token: token,
+                    address: this.publicKey,
+                    signature: signed.signature
+                })
+            })
+            const responseMessage = await response.json();
+            console.log('responseMessage', responseMessage);
+            return responseMessage;
         } catch (e) {
             console.warn(e);
         }

@@ -4,6 +4,8 @@ const path = require("path");
 
 const app = express();
 
+app.use(express.json());
+
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
   app.use(express.static(path.join(__dirname, "build")));
@@ -13,5 +15,16 @@ if (process.env.NODE_ENV === "production") {
   };
   app.get(["/*"], serveFile);
 }
+
+app.post(`/validate-signature`, (req, res) => {
+  console.log(req.body)
+    const { token, address, signature} = req.body;
+    console.log('token', token);
+    console.log('address', address);
+    console.log('signature', signature);
+    res.status(200).json({
+      message: "Signature recevied"
+    });
+})
 
 app.listen(5000, () => console.log(`Listening on port ${5000}`));

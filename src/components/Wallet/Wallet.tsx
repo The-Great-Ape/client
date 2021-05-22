@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Wallet from '../../lib/wallet/Wallet';
 import './Wallet.css';
+import Snackbar from "../Snackbar";
 
 type WalletProps = {
     token: string;
@@ -27,8 +28,9 @@ export default function (props: WalletProps) {
             {wallet && wallet.isConnected ? (
                 <div>
                     <p>Wallet address: {wallet.publicKey.toBase58()} {wallet && wallet.isConnected ? "true" : "false"}</p>
-                    <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.sendTransaction()}>Send Transaction</Button>
-                    <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.signMessage(props.token)}>Sign Message</Button>
+                    {/* <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.sendTransaction()}>Send Transaction</Button> */}
+                    {/* <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.signMessage(props.token)}>Sign Message</Button> */}
+                    <Snackbar wallet={wallet} token={props.token}>Sign Message</Snackbar>
                     <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.disconnect()}>Disconnect</Button>
                 </div>
             ) : (
