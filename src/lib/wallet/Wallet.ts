@@ -1,5 +1,6 @@
 // @ts-ignore
 import SolanaWalletAdapter from '@project-serum/sol-wallet-adapter';
+import bs58 from 'bs58';
 
 import {
     AccountInfo,
@@ -98,20 +99,25 @@ class Wallet {
         }
     }
 
+    toHex(buffer: Uint8Array | string) {
+        return Array.prototype.map
+            .call(buffer, (x) => ('00' + x.toString(16)).slice(-2))
+            .join('');
+    }
+
     async signMessage(token: string) {
         try {
-            const message = token;
-            const data = new TextEncoder().encode(message);
+            const data = new TextEncoder().encode(token);
             const signed = await this.wallet.sign(data, 'hex');
-            console.log('Got signature: ' + signed.signature);
-            const response = await fetch('/validate-signature', {
+              
+            const response = await fetch('http://localhost:4000/validate', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     token: token,
-                    address: this.publicKey,
+                    address: this.publicKey.toBuffer(),
                     signature: signed.signature
                 })
             })
