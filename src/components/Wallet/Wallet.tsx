@@ -6,11 +6,13 @@ import Snackbar from "../Snackbar";
 
 type WalletProps = {
     token: string;
+    avatar: string;
+    discordId: string;
 }
 
 export default function (props: WalletProps) {
     const [wallet, setWallet] = useState<Wallet | null>();
-    
+
     // useEffect(() => {
     //     console.log('wallet changed');
     // }, [wallet, wallet.isConnected])
@@ -23,14 +25,38 @@ export default function (props: WalletProps) {
         setWallet(wallet);
     }
 
+    const sign = async () => {
+        let response = await wallet.signMessage(props.token, props.discordId);
+    
+        if (response) {
+        //   setState({
+        //     open: true,
+        //     vertical: 'top',
+        //     horizontal: 'center',
+        //     message: 'Success'
+        //   });
+        }
+      };
+
     return (
         <div className="wallet">
+            <div className="logo"><img src="/logo.png" alt="logo" /></div>
+            <div className="logo"><img src={`https://cdn.discordapp.com/avatars/${props.discordId}/${props.avatar}?size=512`} alt="avatar" /></div>
+
             {wallet && wallet.isConnected ? (
                 <div>
-                    <p>Wallet address: {wallet.publicKey.toBase58()} {wallet && wallet.isConnected ? "true" : "false"}</p>
+                    <p className="info">{wallet.publicKey.toBase58()}</p>
                     {/* <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.sendTransaction()}>Send Transaction</Button> */}
                     {/* <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.signMessage(props.token)}>Sign Message</Button> */}
-                    <Snackbar wallet={wallet} token={props.token}>Sign Message</Snackbar>
+                    {/* <Snackbar wallet={wallet} token={props.token} avatar={props.avatar} discordId={props.discordId}>Sign Message</Snackbar> */}
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        className="button"
+                        size="large"
+                        onClick={sign}>
+                        Link Discord to Wallet
+                    </Button>
                     <Button color="primary" variant="contained" className="button" size="large" onClick={() => wallet.disconnect()}>Disconnect</Button>
                 </div>
             ) : (

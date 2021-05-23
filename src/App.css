@@ -15,7 +15,34 @@ body{
 }
 
 .logo {
-  height: 40vmin;
+  height: 25vmin !important;
+  width: 25vmin !important;
+  background-color: transparent !important;
+  border-radius:50% !important;
+  box-shadow:  0 0 10px 5px rgba(0,0,0,0.6);
+  display:inline-block;
+  overflow:hidden;
+  margin-bottom:50px;
+}
+
+.logo.minimal {
+  box-shadow:  none !important;
+
+}
+
+.logo img{
+  max-height:100%;
+}
+
+.info {
+  color: #fff;
+  background-color: rgb(34, 43, 69);
+  box-shadow:  0 0 .5px .5px rgba(0,0,0,0.6);
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25rem
 }
 
 .button {

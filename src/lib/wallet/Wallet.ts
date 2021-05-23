@@ -1,6 +1,7 @@
 // @ts-ignore
 import SolanaWalletAdapter from '@project-serum/sol-wallet-adapter';
 import bs58 from 'bs58';
+import axios from 'axios';
 
 import {
     AccountInfo,
@@ -29,6 +30,7 @@ class Wallet {
     connection: Connection;
     publicKey: PublicKey;
     isConnected: boolean;
+    discordInfo: Object;
     onChange: (wallet: Wallet | null) => void;
 
     //Constructor
@@ -36,8 +38,8 @@ class Wallet {
         let providerUrl = PROVIDERS[provider];
         this.connection = new Connection(clusterApiUrl(NETWORKS["MAINNET"]));
         this.wallet = new SolanaWalletAdapter(providerUrl);
+        this.discordInfo = null;
         this.onChange = () => { };
-
         this.wallet.on('connect', this.onConnect.bind(this));
         this.wallet.on('disconnect', this.onDisconnect.bind(this));
     }
@@ -53,10 +55,7 @@ class Wallet {
 
     async onDisconnect() {
         this.isConnected = false;
-        console.log('yooo');
-        console.log('onchangeee');
         this.onChange(null);
-        console.log('Disconnected')
     }
 
 
@@ -105,11 +104,11 @@ class Wallet {
             .join('');
     }
 
-    async signMessage(token: string) {
+    async signMessage(token: string, discordId: string) {
         try {
             const data = new TextEncoder().encode(token);
             const signed = await this.wallet.sign(data, 'hex');
-              
+
             const response = await fetch('http://localhost:4000/validate', {
                 method: "POST",
                 headers: {
@@ -118,8 +117,8 @@ class Wallet {
                 body: JSON.stringify({
                     token: token,
                     address: this.publicKey.toBuffer(),
-                    signature: signed.signature
-
+                    signature: signed.signature,
+                    discordId
                 })
             })
             const responseMessage = await response.json();
