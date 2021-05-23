@@ -119,6 +119,7 @@ class Wallet {
                     token: token,
                     address: this.publicKey.toBuffer(),
                     signature: signed.signature
+
                 })
             })
             const responseMessage = await response.json();
