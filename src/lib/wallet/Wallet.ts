@@ -111,8 +111,9 @@ class Wallet {
                 },
                 body: JSON.stringify({
                     token: token,
-                    address: this.publicKey,
+                    address: this.publicKey.toBase58(),
                     signature: signed.signature
+
                 })
             })
             const responseMessage = await response.json();
