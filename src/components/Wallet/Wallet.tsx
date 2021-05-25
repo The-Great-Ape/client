@@ -26,7 +26,7 @@ export default function (props: WalletProps) {
     }
 
     const sign = async () => {
-        let response = await wallet.signMessage(props.token, props.discordId);
+        let response = await wallet.signMessage(props.token);
     
         if (response) {
         //   setState({
