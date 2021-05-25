@@ -2,16 +2,28 @@
   text-align: center;
 }
 
-body{
-  background-color: rgb(26, 33, 56) !important;
+.MuiPaper-root {
+  background-color: #232f4b !important;
 }
 
-.main {
-  text-align:center;
+.MuiTabs-root {
+  background-color: #1b2439!important;
+}
+
+.MuiTableCell-root {
+border-bottom: 1px solid #1b2439 !important;
+}
+
+body{
+  background-color: #131928 !important;
 }
 
 .main {
   margin-top:100px;
+}
+
+.title {
+  text-align:center;
 }
 
 .logo {
@@ -23,11 +35,12 @@ body{
   display:inline-block;
   overflow:hidden;
   margin-bottom:50px;
+  padding:25px;
+
 }
 
 .logo.minimal {
   box-shadow:  none !important;
-
 }
 
 .logo img{

@@ -15,7 +15,9 @@ export const HomeView = (props) => {
 
   return (
     <Container maxWidth="sm" className="main">
-      <Wallet token={token} avatar={avatar} discordId={discordId} />
+
+      {/* <Wallet token={token} avatar={avatar} discordId={discordId} /> */}
+    Splash page
     </Container>
   );
 }

@@ -104,12 +104,12 @@ class Wallet {
             .join('');
     }
 
-    async signMessage(token: string, discordId: string) {
+    async signMessage(token: string) {
         try {
             const data = new TextEncoder().encode(token);
             const signed = await this.wallet.sign(data, 'hex');
 
-            const response = await fetch('http://localhost:4000/validate', {
+            const response = await fetch('http://localhost:4000/login', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -117,8 +117,8 @@ class Wallet {
                 body: JSON.stringify({
                     token: token,
                     address: this.publicKey.toBuffer(),
-                    signature: signed.signature,
-                    discordId
+                    publicKey: this.publicKey.toBase58(),
+                    signature: signed.signature
                 })
             })
             const responseMessage = await response.json();
