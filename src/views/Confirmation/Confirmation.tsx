@@ -16,7 +16,7 @@ export const ConfirmationView = () => {
     const [discordId, setDiscordId] = React.useState(getParam('discord_id'));
     const [provider, setProvider] = React.useState(getParam('provider'));
     const { session, setSession } = useSession();
-    const publicKey = session.publicKey;
+    const publicKey = session && session.publicKey;
     const token = session && session.token;
     const userId = session && session.user && session.user.userId;
 

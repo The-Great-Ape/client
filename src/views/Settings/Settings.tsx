@@ -36,7 +36,7 @@ export const SettingsView = () => {
       </Typography>
       <Divider variant="middle" />
       <br />
-      {isConnected ? <div>
+     <div className="tabs">
 
         <AppBar position="static" color="primary">
           <Tabs value={tab} onChange={handleChange} aria-label="simple tabs example">
@@ -104,7 +104,6 @@ export const SettingsView = () => {
           </TableContainer>
         </div>}
       </div>
-        : <Box>Not Connected</Box>}
     </Container>
   );
 }

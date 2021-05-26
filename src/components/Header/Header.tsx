@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Wallet from '../../lib/wallet/Wallet';
 import { useSession } from "../../contexts/session";
+import { useLocation } from 'react-router-dom';
 
 import './Header.less';
 
@@ -20,10 +21,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function Header() {
+export function Header(props: any) {
     const classes = useStyles();
     const [wallet, setWallet] = useState<Wallet | null>();
     const { session, setSession } = useSession();
+
+    const location = useLocation();
+    const currPath = location.pathname;
+    const routes = [
+        { name: "Home", path: "/" },
+        { name: "Servers", path: "/servers" },
+        { name: "Settings", path: "/settings" }
+    ]
 
     const isConnected = session && session.isConnected;
 
@@ -37,8 +46,9 @@ export function Header() {
         setSession(session);
     }
 
-    async function disconnect(){
+    async function disconnect() {
         setSession(null);
+        window.location.href = "/"
     }
 
     return (
@@ -48,11 +58,11 @@ export function Header() {
                 <Typography component="h1" variant="h6" color="inherit" className={classes.title} noWrap>
                     Grape
                 </Typography>
-                <div className="header-menu">
-                    <Link to="/" className="header-menu-item"><Button >Home</Button></Link>
-                    <Link to="servers" className="header-menu-item"><Button >Servers</Button></Link>
-                    <Link to="settings" className="header-menu-item"><Button>Settings</Button></Link>
-                </div>
+                {isConnected && <div className="header-menu">
+                    {routes.map(route =>
+                        <Link to={route.path} ><Button className={"header-menu-item " + (route.path === currPath ? "active" : "")}>{route.name}</Button></Link>
+                    )}
+                </div>}
                 <div className="header-action">
                     <Button color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? disconnect : connect}>
                         {isConnected ? 'Disconnect' : 'Conntect'}
