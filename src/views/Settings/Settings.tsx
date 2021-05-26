@@ -23,90 +23,88 @@ export const SettingsView = () => {
   const wallets = session && session.wallets;
   const user = session && session.user;
   const discordId = user && user.discordId;
+  const userId = user && user.userId;
 
   const handleChange = (_event: any, newValue: number) => {
     setTab(newValue);
   };
 
-  
   return (
     <Container maxWidth="md" className="main">
-
-      
       <Typography variant="h5" gutterBottom className="title">
         Settings
       </Typography>
       <Divider variant="middle" />
       <br />
-      {isConnected ? <div> 
+      {isConnected ? <div>
 
         <AppBar position="static" color="primary">
-        <Tabs value={tab} onChange={handleChange} aria-label="simple tabs example">
-          <Tab label="Accounts" />
-          <Tab label="Wallets" />
-        </Tabs>
-      </AppBar>
+          <Tabs value={tab} onChange={handleChange} aria-label="simple tabs example">
+            <Tab label="Accounts" />
+            <Tab label="Wallets" />
+          </Tabs>
+        </AppBar>
 
-      {tab === 0 && <div>
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="left">Provider</TableCell>
-                <TableCell align="right">ID</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+        {tab === 0 && <div>
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Provider</TableCell>
+                  <TableCell align="right">ID</TableCell>
+                  <TableCell align="right">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
 
-              <TableRow key={'discord'}>
-                <TableCell component="th" scope="row"> Discord</TableCell>
-                <TableCell align="right">{discordId || <i>Not linked</i>}</TableCell>
-                <TableCell align="right">
-                  <a href="http://localhost:4000/discord"><Button color="primary" size="small" variant="contained" title="Connect">{discordId ? 'Unlink Discord' : 'Link Discord'}</Button></a>
-                </TableCell>
-              </TableRow>
+                <TableRow key={'discord'}>
+                  <TableCell component="th" scope="row"> Discord</TableCell>
+                  <TableCell align="right">{discordId || <i>Not linked</i>}</TableCell>
+                  <TableCell align="right">
+                    <a href={`http://localhost:4000/discord?user_id=${userId}`}><Button color="primary" size="small" variant="contained" title="Connect">{discordId ? 'Unlink Discord' : 'Link Discord'}</Button></a>
+                  </TableCell>
+                </TableRow>
 
-              <TableRow key={'twitter'}>
-                <TableCell component="th" scope="row">Twitter</TableCell>
-                <TableCell align="right"><i>Not linked</i></TableCell>
-                <TableCell align="right">
-                  <Button color="primary" size="small" variant="contained" title="Connect" disabled>Coming Soon</Button>
-                </TableCell>              
-              </TableRow>
+                <TableRow key={'twitter'}>
+                  <TableCell component="th" scope="row">Twitter</TableCell>
+                  <TableCell align="right"><i>Not linked</i></TableCell>
+                  <TableCell align="right">
+                    <Button color="primary" size="small" variant="contained" title="Connect" disabled>Coming Soon</Button>
+                  </TableCell>
+                </TableRow>
 
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>}
 
-      {tab === 1 && <div>
+        {tab === 1 && <div>
 
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="left">Address</TableCell>
-                <TableCell align="right">Provider</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {wallets.map(wallet=>{
-                return <TableRow key={'wallet1'}>
-                <TableCell component="th" scope="row">{wallet.address}</TableCell>
-                <TableCell align="right">Sollet</TableCell>
-                <TableCell align="right">
-                  <Button color="primary" size="small" variant="contained" title="Connect">Remove</Button>
-                </TableCell>
-              </TableRow>
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>}
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Address</TableCell>
+                  <TableCell align="right">Provider</TableCell>
+                  <TableCell align="right">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {wallets.map(wallet => {
+                  return <TableRow key={'wallet1'}>
+                    <TableCell component="th" scope="row">{wallet.address}</TableCell>
+                    <TableCell align="right">Sollet</TableCell>
+                    <TableCell align="right">
+                      <Button color="primary" size="small" variant="contained" title="Connect">Remove</Button>
+                    </TableCell>
+                  </TableRow>
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>}
       </div>
-      : <Box>Not Connected</Box>}
+        : <Box>Not Connected</Box>}
     </Container>
   );
 }
