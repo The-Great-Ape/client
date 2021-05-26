@@ -1,7 +1,6 @@
 // @ts-ignore
 import SolanaWalletAdapter from '@project-serum/sol-wallet-adapter';
-import bs58 from 'bs58';
-import axios from 'axios';
+import { useSession } from "../../contexts/session";
 
 import {
     AccountInfo,
@@ -106,8 +105,11 @@ class Wallet {
 
     async signMessage(token: string) {
         try {
-            const data = new TextEncoder().encode(token);
+            const data = new TextEncoder().encode('helloworld');
             const signed = await this.wallet.sign(data, 'hex');
+            const signature = signed.signature;
+            const publicKey = this.publicKey.toBase58();
+            const address = this.publicKey.toBuffer();
 
             const response = await fetch('http://localhost:4000/login', {
                 method: "POST",
@@ -116,20 +118,32 @@ class Wallet {
                 },
                 body: JSON.stringify({
                     token: token,
-                    address: this.publicKey.toBuffer(),
-                    publicKey: this.publicKey.toBase58(),
-                    signature: signed.signature
+                    address,
+                    publicKey,
+                    signature
                 })
-            })
-            const responseMessage = await response.json();
-            console.log('responseMessage', responseMessage);
-            return responseMessage;
+            });
+
+            const session = await response.json();
+
+            return {
+                user: {
+                    userId: session.userId,
+                    discordId: session.discordId,
+                    twitterId: session.twitterId
+                },
+                wallets: session.wallets,
+                token: {
+                    signature,
+                    address,
+                },
+                publicKey,
+                isConnected: true
+            };
         } catch (e) {
             console.warn(e);
         }
     }
-
-
 }
 
 export default Wallet;

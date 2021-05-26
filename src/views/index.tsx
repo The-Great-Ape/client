@@ -1,3 +1,4 @@
-export { HomeView } from "./home";
-//export { HomeView } from "./oldHome";
-export { SettingsView } from "./settings";
+export { HomeView } from "./Home/Home";
+export { ServersView } from "./Servers/Servers";
+export { SettingsView } from "./Settings/Settings";
+export { ConfirmationView } from "./Confirmation/Confirmation";

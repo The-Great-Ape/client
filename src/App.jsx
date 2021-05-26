@@ -1,32 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
-import { WalletProvider } from "./contexts/wallet";
-import { ConnectionProvider } from "./contexts/connection";
-import { AccountsProvider } from "./contexts/accounts";
-import { MarketProvider } from "./contexts/market";
-import { HomeView, SettingsView } from "./views";
+import { SessionProvider } from "./contexts/session";
+import { HomeView, ServersView, SettingsView, ConfirmationView } from "./views";
 import Header from './components/Header/Header';
-//import "./App.less";
-import "./App.css";
-
+import "./App.less";
 
 function App() {
   return (
     <div className="main">
       <HashRouter basename={"/"}>
-        <Header />
-        <ConnectionProvider>
-          <WalletProvider>
-            <AccountsProvider>
-              <MarketProvider>
-                <Switch>
-                  <Route exact path="/" component={() => <HomeView />} />
-                  <Route exact path="/settings" children={<SettingsView />} />
-                </Switch>
-              </MarketProvider>
-            </AccountsProvider>
-          </WalletProvider>
-        </ConnectionProvider>
+        <SessionProvider>
+          <Header />
+          <Switch>
+            <Route exact path="/" component={() => <HomeView />} />
+            <Route exact path="/servers" children={<ServersView />} />
+            <Route exact path="/settings" children={<SettingsView />} />           
+            <Route exact path="/confirmation" children={<ConfirmationView />} />
+          </Switch>
+        </SessionProvider>
       </HashRouter>
     </div>
   );

@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useMemo, useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Wallet from '../../lib/wallet/Wallet';
+import { useSession } from "../../contexts/session";
+
 import './Header.less';
 
 
@@ -18,14 +20,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Header() {
+export function Header() {
     const classes = useStyles();
-
     const [wallet, setWallet] = useState<Wallet | null>();
+    const { session, setSession } = useSession();
 
-    // useEffect(() => {
-    //     console.log('wallet changed');
-    // }, [wallet, wallet.isConnected])
+    const isConnected = session && session.isConnected;
 
     async function connect() {
         let wallet = new Wallet();
@@ -33,8 +33,12 @@ export default function Header() {
 
         await wallet.connect();
         setWallet(wallet);
-        let response = await wallet.signMessage('helloworld');
-        console.log(response);
+        let session = await wallet.signMessage('helloworld');
+        setSession(session);
+    }
+
+    async function disconnect(){
+        setSession(null);
     }
 
     return (
@@ -47,15 +51,16 @@ export default function Header() {
                 <div className="header-menu">
                     <Link to="/" className="header-menu-item"><Button >Home</Button></Link>
                     <Link to="servers" className="header-menu-item"><Button >Servers</Button></Link>
-                    <Link to="settings" className="header-menu-item"><Button >Settings</Button></Link>
+                    <Link to="settings" className="header-menu-item"><Button>Settings</Button></Link>
                 </div>
                 <div className="header-action">
-                    <Button color="primary" size="medium" variant="contained" title="Connect" onClick={connect}>
-                        Connect
+                    <Button color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? disconnect : connect}>
+                        {isConnected ? 'Disconnect' : 'Conntect'}
                     </Button>
                 </div>
             </Toolbar>
-
         </AppBar>
     );
 }
+
+export default Header;
