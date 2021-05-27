@@ -13,8 +13,6 @@ function getParam(param: string) {
     return new URLSearchParams(document.location.search).get(param);
 }
 
-
-
 export function Register(props: any) {
     const [serverId, serServerId] = React.useState(getParam('server_id'));
     const { session, setSession } = useSession();
