@@ -1,8 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Session from '../models/Session';
 
+//Initial state
 const LOCAL_STORAGE_KEY = 'grape-session';
-let initialState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || null;
+let grapeSession = localStorage.getItem(LOCAL_STORAGE_KEY);
+if(grapeSession === "undefined") grapeSession = null;
+let initialState = JSON.parse(grapeSession) || null;
 
 if(initialState === "undefined"){
   initialState = null;
