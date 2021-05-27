@@ -35,9 +35,11 @@ export const ServersView = () => {
             <TableBody>
               <TableRow key={'discord'}>
                 <TableCell ><img src="/logo.png" alt="logo" className="logo-small"/></TableCell>
-                <TableCell > Great Ape</TableCell>
+                <TableCell  >Great Ape</TableCell>
                 <TableCell align="left">
-                  <a href="http://localhost:4000/discord"><Button color="primary" size="small" variant="contained" title="Connect">Register</Button></a>
+                  <a href="http://localhost:4000/discord">
+                    <Button color="primary" size="small" variant="contained" disabled>Registered</Button>
+                  </a>
                 </TableCell>
               </TableRow>
             </TableBody>

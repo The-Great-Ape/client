@@ -1,53 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Box, Circle } from '../../components';
 import { useSession } from "../../contexts/session";
+import User from '../../models/User';
 import './Confirmation.less';
 
 function getParam(param: string) {
     return new URLSearchParams(document.location.search).get(param);
 }
 
+
+
 export const ConfirmationView = () => {
     const [avatar, setAvatar] = React.useState(getParam('avatar'));
     const [discordId, setDiscordId] = React.useState(getParam('discord_id'));
     const [provider, setProvider] = React.useState(getParam('provider'));
     const { session, setSession } = useSession();
-    const publicKey = session && session.publicKey;
-    const token = session && session.token;
     const userId = session && session.user && session.user.userId;
 
-    const updateUser = async function () {
-        try {
-            const signature = token.signature;
-            const address = token.address;
-
-            const response = await fetch('http://localhost:4000/user/' + userId, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    address,
-                    publicKey,
-                    signature,
-                    discordId
-                })
-            });
-
-            session.user.discordId = discordId;
-            setSession(session);
-
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    if (session.user && discordId) {
-        updateUser();
+    if (userId && discordId) {
+        User.updateUser(session, discordId);
+        session.user.discordId = discordId;
+        setSession(session);
     }
 
     return (

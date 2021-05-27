@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Container from '@material-ui/core/Container';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,19 +14,34 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { useSession } from "../../contexts/session";
-import Box from '../../components/Box/Box';
+import User from '../../models/User';
 
 export const SettingsView = () => {
-  const [tab, setTab] = React.useState<number>(0);
+  const [tab, setTab] = useState<number>(0);
   const { session, setSession } = useSession();
+  const [discord, setDiscord] = useState(null);
   const isConnected = session && session.isConnected;
   const wallets = session && session.wallets;
   const user = session && session.user;
-  const discordId = user && user.discordId;
   const userId = user && user.userId;
+
+  useEffect(() => {
+    const user = session && session.user;
+    const discordId = user && user.discordId;
+    setDiscord(discordId);
+  }, [session]);
+
 
   const handleChange = (_event: any, newValue: number) => {
     setTab(newValue);
+  };
+
+  const unlinkDiscord = async () => {
+    await User.updateUser(session, null);
+    session.user.discordId = null;
+    console.log(session);
+    setSession(session);
+    setDiscord(null);
   };
 
   return (
@@ -36,7 +51,7 @@ export const SettingsView = () => {
       </Typography>
       <Divider variant="middle" />
       <br />
-     <div className="tabs">
+      <div className="tabs">
 
         <AppBar position="static" color="primary">
           <Tabs value={tab} onChange={handleChange} aria-label="simple tabs example">
@@ -59,9 +74,10 @@ export const SettingsView = () => {
 
                 <TableRow key={'discord'}>
                   <TableCell component="th" scope="row"> Discord</TableCell>
-                  <TableCell align="right">{discordId || <i>Not linked</i>}</TableCell>
+                  <TableCell align="right">{discord || <i>Not linked</i>}</TableCell>
                   <TableCell align="right">
-                    <a href={`http://localhost:4000/discord?user_id=${userId}`}><Button color="primary" size="small" variant="contained" title="Connect">{discordId ? 'Unlink Discord' : 'Link Discord'}</Button></a>
+                    {!discord && <a href={`http://localhost:4000/discord?user_id=${userId}`}><Button color="primary" size="small" variant="contained">Link Discord</Button></a>}
+                    {discord && <Button color="primary" size="small" variant="contained" onClick={unlinkDiscord}>Unlink Discord</Button>}
                   </TableCell>
                 </TableRow>
 
