@@ -76,7 +76,7 @@ export const SettingsView = () => {
                   <TableCell component="th" scope="row"> Discord</TableCell>
                   <TableCell align="right">{discord || <i>Not linked</i>}</TableCell>
                   <TableCell align="right">
-                    {!discord && <a href={`http://localhost:4000/discord?user_id=${userId}`}><Button color="primary" size="small" variant="contained">Link Discord</Button></a>}
+                    {!discord && <a href={`${process.env.REACT_APP_API_URL}/discord?user_id=${userId}`}><Button color="primary" size="small" variant="contained">Link Discord</Button></a>}
                     {discord && <Button color="primary" size="small" variant="contained" onClick={unlinkDiscord}>Unlink Discord</Button>}
                   </TableCell>
                 </TableRow>

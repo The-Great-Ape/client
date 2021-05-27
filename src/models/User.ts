@@ -15,7 +15,7 @@ class User {
             const publicKey = session.publicKey;
             const userId = session.user && session.user.userId;
 
-            const response = await fetch('http://localhost:4000/user/' + userId, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/user/` + userId, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

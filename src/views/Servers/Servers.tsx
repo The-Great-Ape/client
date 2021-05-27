@@ -37,7 +37,7 @@ export const ServersView = () => {
                 <TableCell ><img src="/logo.png" alt="logo" className="logo-small"/></TableCell>
                 <TableCell  >Great Ape</TableCell>
                 <TableCell align="left">
-                  <a href="http://localhost:4000/discord">
+                  <a href={`${process.env.REACT_APP_API_URL}/discord`}>
                     <Button color="primary" size="small" variant="contained" disabled>Registered</Button>
                   </a>
                 </TableCell>
