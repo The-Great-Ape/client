@@ -42,7 +42,7 @@ export function Header(props: any) {
 
         await wallet.connect();
         setWallet(wallet);
-        let session = await wallet.signMessage('helloworld');
+        let session = await wallet.signMessage('$GRAPE');
         setSession(session);
     }
 
