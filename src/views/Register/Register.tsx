@@ -19,10 +19,13 @@ export function RegisterView(props: any) {
     const [discordId, setDiscordId] = React.useState(getParam('discord_id'));
     const [userId, setUserId] = React.useState(getParam('user_id'));
     const [provider, setProvider] = React.useState(getParam('provider'));
+    const [serverName, setServerName] = React.useState(getParam('serverName'));
+    const [serverLogo, setServerLogo] = React.useState(decodeURIComponent(getParam('serverLogo')));
 
     const { session, setSession } = useSession();
     const [wallet, setWallet] = useState<Wallet | null>();
     const isConnected = session && session.isConnected;
+    console.log(avatar);
     
     async function register() {
         let wallet = new Wallet();
@@ -30,10 +33,10 @@ export function RegisterView(props: any) {
 
         await wallet.connect();
         setWallet(wallet);
-        setTimeout(async ()=>{
+        setTimeout(async () => {
             let session = await wallet.register('$GRAPE', userId);
             setSession(session);
-        },100);
+        }, 100);
     }
 
     return (
@@ -41,12 +44,12 @@ export function RegisterView(props: any) {
             <Box>
                 <div className="title">
                     <Typography variant="h5" gutterBottom>
-                        Register Wallet with <br/>Great Ape
+                        Register Wallet with <br /> {serverName}
                     </Typography>
                 </div>
 
                 <div className="overlap">
-                    <Circle padding={false}><img src="/server-logos/great_ape.png" alt="grape-logo" /></Circle>
+                    <Circle padding={false}><img src={`/server-logos/${serverLogo}`} alt="grape-logo" /></Circle>
                     <Circle padding={false}>
                         {provider === 'discord' && <img src={`https://cdn.discordapp.com/avatars/${discordId}/${avatar}?size=512`} alt="avatar" />}
                     </Circle>

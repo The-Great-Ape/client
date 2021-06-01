@@ -21,15 +21,16 @@ class UserServer {
             const publicKey = session.publicKey;
             const userId = session.user && session.user.userId;
 
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/server/${serverId}/user/${userId}`, {
-                method: "PUT",
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/server/${serverId}/register`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     address,
                     publicKey,
-                    signature
+                    signature,
+                    userId
                 })
             });
 
@@ -49,7 +50,7 @@ class UserServer {
             const publicKey = session.publicKey;
             const userId = session.user && session.user.userId;
 
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/server/${serverId}/user/${userId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/server/${serverId}/unregister`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -57,7 +58,8 @@ class UserServer {
                 body: JSON.stringify({
                     address,
                     publicKey,
-                    signature
+                    signature,
+                    userId
                 })
             });
 

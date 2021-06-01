@@ -13,12 +13,14 @@ import Button from '@material-ui/core/Button';
 import { useSession } from "../../contexts/session";
 import UserServer from '../../models/UserServer';
 
-export const ServersView = () => {
+export function ServersView(props: any) {
   const { session, setSession } = useSession();
   const isConnected = session && session.isConnected;
   let servers = session.servers;
 
-  const register = async (serverId: string) => {
+  console.log(session);
+
+  async function register(serverId: string) {
     let userServers = await UserServer.register(session, serverId);
     session.userServers = [userServers];
     setSession(session);
@@ -52,9 +54,7 @@ export const ServersView = () => {
                 <TableCell ><img src={`/server-logos/${server.logo}`} alt="logo" className="logo-small" /></TableCell>
                 <TableCell  >{server.name}</TableCell>
                 <TableCell align="left">
-                  <a href={`${process.env.REACT_APP_API_URL}/discord`}>
-                    <Button color="primary" size="small" variant="contained" disabled>Registered</Button>
-                  </a>
+                  <Button color="primary" size="small" variant="contained" onClick={() => register(server.serverId)}>Register</Button>
                 </TableCell>
               </TableRow>
             )}
