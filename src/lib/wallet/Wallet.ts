@@ -105,8 +105,8 @@ class Wallet {
 
     async signMessage(token: string) {
         try {
-            const data = new TextEncoder().encode('helloworld');
-            const signed = await this.wallet.sign(data, 'hex');
+            const data = new TextEncoder().encode('$GRAPE');
+            const signed = await this.wallet.sign(data, 'utf8');
             const signature = signed.signature;
             const publicKey = this.publicKey.toBase58();
             const address = this.publicKey.toBuffer();

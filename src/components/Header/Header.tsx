@@ -67,7 +67,7 @@ export function Header(props: any) {
                 </div>}
                 <div className="header-action">
                     <Button color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? disconnect : connect}>
-                        {isConnected ? 'Disconnect' : 'Conntect'}
+                        {isConnected ? 'Disconnect' : 'Connect'}
                     </Button>
                 </div>
             </Toolbar>
