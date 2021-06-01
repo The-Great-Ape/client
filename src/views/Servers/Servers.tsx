@@ -11,11 +11,25 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import { useSession } from "../../contexts/session";
+import UserServer from '../../models/UserServer';
 
 export const ServersView = () => {
   const { session, setSession } = useSession();
   const isConnected = session && session.isConnected;
-  
+  let servers = session.servers;
+
+  const register = async (serverId: string) => {
+    let userServers = await UserServer.register(session, serverId);
+    session.userServers = [userServers];
+    setSession(session);
+  };
+
+  const unregister = async (serverId: string) => {
+    let userServers = await UserServer.unregister(session, serverId);
+    session.userServers = [userServers];
+    setSession(session);
+  };
+
   return (
     <Container maxWidth="md" className="main">
       <Typography variant="h5" gutterBottom className="title">
@@ -23,28 +37,30 @@ export const ServersView = () => {
       </Typography>
       <Divider variant="middle" />
       <br />
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="left" style={{width:'1%'}}>Name</TableCell>
-                <TableCell align="left"style={{width:'70%'}}></TableCell>
-                <TableCell align="left">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left" style={{ width: '1%' }}>Name</TableCell>
+              <TableCell align="left" style={{ width: '70%' }}></TableCell>
+              <TableCell align="left">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {servers.map(server =>
               <TableRow key={'discord'}>
-                <TableCell ><img src="/logo.png" alt="logo" className="logo-small"/></TableCell>
-                <TableCell  >Great Ape</TableCell>
+                <TableCell ><img src={`/server-logos/${server.logo}`} alt="logo" className="logo-small" /></TableCell>
+                <TableCell  >{server.name}</TableCell>
                 <TableCell align="left">
                   <a href={`${process.env.REACT_APP_API_URL}/discord`}>
                     <Button color="primary" size="small" variant="contained" disabled>Registered</Button>
                   </a>
                 </TableCell>
               </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Container>
   );
 }

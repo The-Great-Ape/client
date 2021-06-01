@@ -1,4 +1,4 @@
-export default interface UserWallet {
-    userId: string,
-    address: string
+export default class UserWallet {
+    userId: string;
+    address: string;
 }

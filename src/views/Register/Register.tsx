@@ -14,7 +14,10 @@ function getParam(param: string) {
 }
 
 export function Register(props: any) {
-    const [serverId, serServerId] = React.useState(getParam('server_id'));
+    const [serverId, setServerId] = React.useState(getParam('server_id'));
+    //const [discordId, setServerId] = React.useState(getParam('discord_id'));
+    //const [token, setServerId] = React.useState(getParam('token'));
+
     const { session, setSession } = useSession();
     const [wallet, setWallet] = useState<Wallet | null>();
 
@@ -24,7 +27,7 @@ export function Register(props: any) {
     
         await wallet.connect();
         setWallet(wallet);
-        let session = await wallet.signMessage('helloworld');
+        //let session = await wallet.register(token);
         setSession(session);
     }
 

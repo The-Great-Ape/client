@@ -132,6 +132,8 @@ class Wallet {
                     discordId: session.discordId,
                     twitterId: session.twitterId
                 },
+                servers: session.servers,
+                userServers: session.userServers,
                 wallets: session.wallets,
                 token: {
                     signature,
@@ -143,7 +145,7 @@ class Wallet {
         } catch (e) {
             console.warn(e);
         }
-    }
+    } 
 }
 
 export default Wallet;

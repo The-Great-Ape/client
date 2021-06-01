@@ -42,8 +42,10 @@ export function Header(props: any) {
 
         await wallet.connect();
         setWallet(wallet);
-        let session = await wallet.signMessage('helloworld');
-        setSession(session);
+        setTimeout(async ()=>{
+            let session = await wallet.signMessage('helloworld');
+            setSession(session);
+        },100);
     }
 
     async function disconnect() {
