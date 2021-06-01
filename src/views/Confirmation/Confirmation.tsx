@@ -12,8 +12,6 @@ function getParam(param: string) {
     return new URLSearchParams(document.location.search).get(param);
 }
 
-
-
 export const ConfirmationView = () => {
     const [avatar, setAvatar] = React.useState(getParam('avatar'));
     const [discordId, setDiscordId] = React.useState(getParam('discord_id'));

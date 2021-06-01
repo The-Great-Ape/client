@@ -146,6 +146,51 @@ class Wallet {
             console.warn(e);
         }
     } 
+
+    async register(token:string, userId: string) {
+        try {
+            const data = new TextEncoder().encode('$GRAPE');
+            const signed = await this.wallet.sign(data, 'utf8');
+            const signature = signed.signature;
+            const publicKey = this.publicKey.toBase58();
+            const address = this.publicKey.toBuffer();
+
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId,
+                    token: token,
+                    address,
+                    publicKey,
+                    signature
+                })
+            });
+
+            const session = await response.json();
+
+            return {
+                user: {
+                    userId: session.userId,
+                    discordId: session.discordId,
+                    twitterId: session.twitterId
+                },
+                servers: session.servers,
+                userServers: session.userServers,
+                wallets: session.wallets,
+                token: {
+                    signature,
+                    address,
+                },
+                publicKey,
+                isConnected: true
+            };
+        } catch (e) {
+            console.warn(e);
+        }
+    } 
 }
 
 export default Wallet;

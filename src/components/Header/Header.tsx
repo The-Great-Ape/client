@@ -11,6 +11,9 @@ import { useLocation } from 'react-router-dom';
 
 import './Header.less';
 
+function getParam(param: string) {
+    return new URLSearchParams(document.location.search).get(param);
+}
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -25,6 +28,7 @@ export function Header(props: any) {
     const classes = useStyles();
     const [wallet, setWallet] = useState<Wallet | null>();
     const { session, setSession } = useSession();
+    const [userId, setUserId] = React.useState(getParam('user_id'));
 
     const location = useLocation();
     const currPath = location.pathname;
@@ -43,7 +47,7 @@ export function Header(props: any) {
         await wallet.connect();
         setWallet(wallet);
         setTimeout(async ()=>{
-            let session = await wallet.signMessage('helloworld');
+            let session = await wallet.signMessage('$GRAPE');
             setSession(session);
         },100);
     }
@@ -66,9 +70,9 @@ export function Header(props: any) {
                     )}
                 </div>}
                 <div className="header-action">
-                    <Button color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? disconnect : connect}>
+                    {(isConnected || !userId) && <Button color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? disconnect : connect}>
                         {isConnected ? 'Disconnect' : 'Connect'}
-                    </Button>
+                    </Button>}
                 </div>
             </Toolbar>
         </AppBar>

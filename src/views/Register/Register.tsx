@@ -13,22 +13,27 @@ function getParam(param: string) {
     return new URLSearchParams(document.location.search).get(param);
 }
 
-export function Register(props: any) {
+export function RegisterView(props: any) {
     const [serverId, setServerId] = React.useState(getParam('server_id'));
-    //const [discordId, setServerId] = React.useState(getParam('discord_id'));
-    //const [token, setServerId] = React.useState(getParam('token'));
+    const [avatar, setAvatar] = React.useState(getParam('avatar'));
+    const [discordId, setDiscordId] = React.useState(getParam('discord_id'));
+    const [userId, setUserId] = React.useState(getParam('user_id'));
+    const [provider, setProvider] = React.useState(getParam('provider'));
 
     const { session, setSession } = useSession();
     const [wallet, setWallet] = useState<Wallet | null>();
-
+    const isConnected = session && session.isConnected;
+    
     async function register() {
         let wallet = new Wallet();
         wallet.onChange = (wallet) => setWallet(wallet);
-    
+
         await wallet.connect();
         setWallet(wallet);
-        //let session = await wallet.register(token);
-        setSession(session);
+        setTimeout(async ()=>{
+            let session = await wallet.register('$GRAPE', userId);
+            setSession(session);
+        },100);
     }
 
     return (
@@ -36,16 +41,19 @@ export function Register(props: any) {
             <Box>
                 <div className="title">
                     <Typography variant="h5" gutterBottom>
-                        Great Ape
+                        Register Wallet with <br/>Great Ape
                     </Typography>
                 </div>
 
                 <div className="overlap">
-                    <Circle padding={true}><img src="/grape_logo.svg" alt="grape-logo" /></Circle>
+                    <Circle padding={false}><img src="/server-logos/great_ape.png" alt="grape-logo" /></Circle>
+                    <Circle padding={false}>
+                        {provider === 'discord' && <img src={`https://cdn.discordapp.com/avatars/${discordId}/${avatar}?size=512`} alt="avatar" />}
+                    </Circle>
                 </div>
 
                 <br />
-                <Button color="primary" size="medium" variant="contained" onClick={register}>Register</Button>
+                {!isConnected ? <Button color="primary" size="large" variant="contained" onClick={register}>Link Wallet</Button> : <div>Registered!</div>}
             </Box>
         </Container>
     );
