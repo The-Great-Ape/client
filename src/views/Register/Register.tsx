@@ -35,7 +35,7 @@ export function RegisterView(props: any) {
         setTimeout(async () => {
             let session = await wallet.register('$GRAPE', userId);
             setSession(session);
-        }, 100);
+        }, 1000);
     }
 
     return (
