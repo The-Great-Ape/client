@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { TokenListProvider, TokenInfo } from '@solana/spl-token-registry';
 import { Link } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -99,9 +100,29 @@ const useStyles2 = makeStyles({
   },
 });
 
+const Icon = (props) => {
+  const token = props.tokenMap.get(props.mint);
+  if (!token || !token.logoURI) return null;
+
+  return (
+    <>
+  <img style={{
+    width: "28px",
+    height: "28px"
+  }} src={token.logoURI} />
+    <span style={{marginLeft: "20px"}}>
+  {token.name}
+      
+    </span>
+  </>
+  );
+};
+
 export const PortfolioView = () => {
   const classes = useStyles2();
   const [balances, setBalances] = useState([]);
+  const [tokenList, setTokenList] = useState([]);
+  const [tokenMap, setTokenMap] = useState(new Map());
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
   const { session, setSession } = useSession();
@@ -140,7 +161,7 @@ export const PortfolioView = () => {
     const theOwner = body.params[0];
     return resultValues;
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchBalances();
@@ -151,10 +172,22 @@ export const PortfolioView = () => {
         };
       });
       console.log("here", formattedData);
+      console.log("tokenList", tokenList);
       setBalances(formattedData);
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    new TokenListProvider().resolve().then(tokens => {
+      const tokenList = tokens.filterByClusterSlug('mainnet-beta').getList();
+
+      setTokenMap(tokenList.reduce((map, item) => {
+        map.set(item.address, item);
+        return map;
+      },new Map()));
+    });
+  }, [setTokenMap]);
 
   console.log("balances", balances);
   return (
@@ -192,7 +225,9 @@ export const PortfolioView = () => {
               : balances
             ).map((token, i) => (
               <TableRow key={i}>
-                <TableCell>{token.mint}</TableCell>
+                <TableCell>
+                  <Icon mint={token.mint} tokenMap={tokenMap}/>
+                </TableCell>
                 <TableCell>{token.balance}</TableCell>
               </TableRow>
             ))}
