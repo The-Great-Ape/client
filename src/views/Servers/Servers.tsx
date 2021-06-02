@@ -51,19 +51,24 @@ export const ServersView = (props: any) => {
   useEffect(() => {
     let servers = session && session.servers;
     const userServers = session && session.userServers;
-    let userServerIds = new Map();
-    userServers.forEach(userServer => {
-      userServerIds.set(userServer.serverId, true);
-    });
 
-    let newServers = servers.map(server => {
-      server.registered = userServerIds.get(server.serverId) || false;
+    if (servers && userServers) {
+      let userServerIds = new Map();
 
-      return server;
-    });
+      userServers.forEach(userServer => {
+        userServerIds.set(userServer.serverId, true);
+      });
 
-    setServers(newServers);
-    setUserServers(userServers);
+      let newServers = servers.map(server => {
+        server.registered = userServerIds.get(server.serverId) || false;
+
+        return server;
+      });
+
+      setServers(newServers);
+      setUserServers(userServers);
+    }
+
   }, [session]);
 
   return (
