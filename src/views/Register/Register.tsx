@@ -25,17 +25,16 @@ export function RegisterView(props: any) {
     const { session, setSession } = useSession();
     const [wallet, setWallet] = useState<Wallet | null>();
     const isConnected = session && session.isConnected;
-    
+
     async function register() {
         let wallet = new Wallet();
         wallet.onChange = (wallet) => setWallet(wallet);
 
         await wallet.connect();
+        wallet.wallet._popup.focus();
         setWallet(wallet);
-        setTimeout(async () => {
-            let session = await wallet.register('$GRAPE', userId);
-            setSession(session);
-        }, 1000);
+        let session = await wallet.register('$GRAPE', userId);
+        setSession(session);
     }
 
     return (

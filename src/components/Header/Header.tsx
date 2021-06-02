@@ -45,11 +45,11 @@ export function Header(props: any) {
         wallet.onChange = (wallet) => setWallet(wallet);
 
         await wallet.connect();
+        wallet.wallet._popup.focus();
+
         setWallet(wallet);
-        setTimeout(async ()=>{
-            let session = await wallet.signMessage('$GRAPE');
-            setSession(session);
-        },1000);
+        let session = await wallet.signMessage('$GRAPE');
+        setSession(session);
     }
 
     async function disconnect() {
