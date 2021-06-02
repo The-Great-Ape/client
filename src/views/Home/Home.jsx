@@ -5,7 +5,7 @@ import Box from '../../components/Box/Box';
 import './Home.less';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { ServersView, SettingsView, ConfirmationView, RegisterView } from "../";
+import { ServersView, SettingsView, ConfirmationView, RegisterView, PortfolioView } from "../";
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
@@ -20,6 +20,7 @@ export const HomeView = (props) => {
         <Grid item md={6} sm={12}>
           {/* <Box>{isConnected ? publicKey : 'Not connected'}</Box> */}
           <Container maxWidth="md" className="main">
+            <PortfolioView />
           </Container>
         </Grid>
         <Grid item md={6} sm={12}>
