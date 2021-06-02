@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import Wallet from '../../lib/wallet/Wallet';
 import { useSession } from "../../contexts/session";
 import { useLocation } from 'react-router-dom';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 
 import './Header.less';
 
@@ -29,13 +31,15 @@ export function Header(props: any) {
     const [wallet, setWallet] = useState<Wallet | null>();
     const { session, setSession } = useSession();
     const [userId, setUserId] = React.useState(getParam('user_id'));
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const isMenuOpen = Boolean(anchorEl);
 
     const location = useLocation();
     const currPath = location.pathname;
     const routes = [
         { name: "Home", path: "/" },
-        { name: "Servers", path: "/servers" },
-        { name: "Settings", path: "/settings" }
+        // { name: "Servers", path: "/servers" },
+        // { name: "Settings", path: "/settings" }
     ]
 
     const isConnected = session && session.isConnected;
@@ -57,6 +61,23 @@ export function Header(props: any) {
         window.location.href = "/"
     }
 
+    function trimAddress(addr: string) {
+        let start = addr.substring(0, 4);
+        let end = addr.substring(addr.length - 4);
+        return `${start}...${end}`;
+    }
+
+    //Menu
+    const menuId = 'primary-search-account-menu';
+
+    const handleProfileMenuOpen = (event: any) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <AppBar position="absolute" className="header" elevation={8}>
             <Toolbar className="header">
@@ -70,9 +91,23 @@ export function Header(props: any) {
                     )}
                 </div>}
                 <div className="header-action">
-                    {(isConnected || !userId) && <Button color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? disconnect : connect}>
-                        {isConnected ? 'Disconnect' : 'Connect'}
+                    {(isConnected || !userId) && <Button
+                        aria-controls={menuId}
+                        aria-haspopup="true"
+                        color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? handleProfileMenuOpen : connect}>
+                        {isConnected ? session && trimAddress(session.publicKey) : 'Connect'}
                     </Button>}
+                    <Menu
+                        anchorEl={anchorEl}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        id={menuId}
+                        keepMounted
+                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        open={isMenuOpen}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem onClick={disconnect}>Disconnect</MenuItem>
+                    </Menu>
                 </div>
             </Toolbar>
         </AppBar>

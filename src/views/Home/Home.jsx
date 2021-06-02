@@ -5,6 +5,9 @@ import Box from '../../components/Box/Box';
 import './Home.less';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { ServersView, SettingsView, ConfirmationView, RegisterView } from "../";
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 export const HomeView = (props) => {
 
@@ -13,12 +16,21 @@ export const HomeView = (props) => {
   const publicKey = session && session.publicKey;
   return (
     <div className="home">
-
+      <Grid container spacing={3}>
+        <Grid item md={6} sm={12}>
+          {/* <Box>{isConnected ? publicKey : 'Not connected'}</Box> */}
+          <Container maxWidth="md" className="main">
+          </Container>
+        </Grid>
+        <Grid item md={6} sm={12}>
+          <ServersView />
+          <SettingsView />
+        </Grid>
+      </Grid>
       {/* <Wallet token={token} avatar={avatar} discordId={discordId} /> */}
       {/* {isConnected ? 'Connected' : 'Not Connected'} */}
-      <Container maxWidth="md" className="main">
-        <Box>{isConnected ? publicKey : 'Not connected'}</Box>
-      </Container>
+      {/* <Container maxWidth="md" className="main">
+         <Box>{isConnected ? publicKey : 'Not connected'}</Box> */}
     </div>
   );
 }

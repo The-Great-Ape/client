@@ -41,7 +41,7 @@ export const ConfirmationView = () => {
                 </div>
 
                 <br />
-                <Link to='settings'><Button color="primary" size="medium" variant="contained" title="Connect">Settings</Button></Link>
+                <Link to='/'><Button color="primary" size="medium" variant="contained" title="Connect">Home</Button></Link>
             </Box>
         </Container>
     );
