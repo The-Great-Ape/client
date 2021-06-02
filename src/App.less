@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+
 }
 
 .MuiPaper-root {
@@ -20,9 +21,25 @@ border-bottom: 1px solid #1b2439 !important;
 }
 
 body{
-  background-color: #131928 !important;
+ background-color: #040713 !important;
+
 }
 
+.bg-grid {
+  position:absolute;
+  bottom:0; left:0;
+  width:100%;
+  z-index:10;
+  background-image: linear-gradient(180deg, #050814 0rem, rgba(5, 8, 20, 0.9) 10rem, rgba(5, 8, 20, 0.8) 10rem, hsla(0, 0%, 100%, 0)), url("/grid.png");
+  background-size: cover; 
+  background-repeat: no-repeat;
+  height: 25rem;
+}
+
+.home {
+  z-index:1000;
+
+}
 .main {
   margin-top:100px;
 }
@@ -43,3 +60,4 @@ body{
 a {
   text-decoration: none !important;
 }
+

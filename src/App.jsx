@@ -22,6 +22,7 @@ function App() {
           </Switch>
         </SessionProvider>
       </HashRouter>
+
     </div>
   );
 }
