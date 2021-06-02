@@ -13,7 +13,7 @@ class User {
             const signature = token.signature;
             const address = token.address;
             const publicKey = session.publicKey;
-            const userId = session.user && session.user.userId;
+            const userId = session.userId;
 
             const response = await fetch(`${process.env.REACT_APP_API_URL}/user/` + userId, {
                 method: "PUT",

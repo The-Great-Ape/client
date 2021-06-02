@@ -4,11 +4,15 @@ class UserServer {
     userServerId: string;
     userId: string;
     serverId: string;
+    name: string;
+    logo: string;
 
     constructor(data: any){
         this.userServerId = data.userServerId;
         this.userId = data.userId;
         this.serverId = data.serverId;
+        this.name = data.name;
+        this.logo = data.logo;
     }
 
     static async register(session: Session, serverId: string){
@@ -19,7 +23,7 @@ class UserServer {
             const signature = token.signature;
             const address = token.address;
             const publicKey = session.publicKey;
-            const userId = session.user && session.user.userId;
+            const userId = session.userId;
 
             const response = await fetch(`${process.env.REACT_APP_API_URL}/server/${serverId}/register`, {
                 method: "POST",
@@ -33,8 +37,9 @@ class UserServer {
                     userId
                 })
             });
+            const userServer = await response.json();
+            return new UserServer(userServer);
 
-            return new UserServer(response);
         } catch (err) {
             console.log(err);
         }
@@ -48,10 +53,10 @@ class UserServer {
             const signature = token.signature;
             const address = token.address;
             const publicKey = session.publicKey;
-            const userId = session.user && session.user.userId;
+            const userId = session.userId;
 
             const response = await fetch(`${process.env.REACT_APP_API_URL}/server/${serverId}/unregister`, {
-                method: "DELETE",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -63,7 +68,7 @@ class UserServer {
                 })
             });
 
-            return new UserServer(response);
+            return true;
         } catch (err) {
             console.log(err);
         }

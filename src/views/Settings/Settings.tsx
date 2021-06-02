@@ -21,13 +21,11 @@ export const SettingsView = () => {
   const { session, setSession } = useSession();
   const [discord, setDiscord] = useState(null);
   const isConnected = session && session.isConnected;
-  const wallets = session && session.wallets;
-  const user = session && session.user;
-  const userId = user && user.userId;
-
+  const wallets = session && session.userWallets;
+  const userId = session && session.userId;
+  
   useEffect(() => {
-    const user = session && session.user;
-    const discordId = user && user.discordId;
+    const discordId = session && session.discordId;
     setDiscord(discordId);
   }, [session]);
 
@@ -38,8 +36,7 @@ export const SettingsView = () => {
 
   const unlinkDiscord = async () => {
     await User.updateUser(session, null);
-    session.user.discordId = null;
-    console.log(session);
+    session.discordId = null;
     setSession(session);
     setDiscord(null);
   };

@@ -17,7 +17,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.post(`/validate-signature`, (req, res) => {
-  console.log(req.body)
     const { token, address, signature} = req.body;
     console.log('token', token);
     console.log('address', address);

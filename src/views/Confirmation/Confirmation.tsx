@@ -17,11 +17,10 @@ export const ConfirmationView = () => {
     const [discordId, setDiscordId] = React.useState(getParam('discord_id'));
     const [provider, setProvider] = React.useState(getParam('provider'));
     const { session, setSession } = useSession();
-    const userId = session && session.user && session.user.userId;
 
-    if (userId && discordId) {
+    if (session && discordId && session.discordId !== discordId) {
         User.updateUser(session, discordId);
-        session.user.discordId = discordId;
+        session.discordId = discordId;
         setSession(session);
     }
 

@@ -3,14 +3,10 @@ import { HashRouter, Route, Switch } from "react-router-dom";
 import { SessionProvider } from "./contexts/session";
 import { HomeView, ServersView, SettingsView, ConfirmationView, RegisterView } from "./views";
 import Header from './components/Header/Header';
-import { useSession } from "./contexts/session";
 
 import "./App.less";
 
 function App() {
-  const { session, setSession } = useSession();
-  const isConnected = session && session.isConnected;
-
   return (
     <div className="main">
       <HashRouter basename={"/"}>

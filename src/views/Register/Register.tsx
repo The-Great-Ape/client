@@ -25,7 +25,6 @@ export function RegisterView(props: any) {
     const { session, setSession } = useSession();
     const [wallet, setWallet] = useState<Wallet | null>();
     const isConnected = session && session.isConnected;
-    console.log(avatar);
     
     async function register() {
         let wallet = new Wallet();

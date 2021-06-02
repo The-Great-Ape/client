@@ -46,10 +46,10 @@ export function Header(props: any) {
 
         await wallet.connect();
         setWallet(wallet);
-        setTimeout(async ()=>{
+        //setTimeout(async ()=>{
             let session = await wallet.signMessage('$GRAPE');
             setSession(session);
-        },100);
+        //},100);
     }
 
     async function disconnect() {

@@ -12,6 +12,7 @@ import {
     SystemProgram,
     RpcResponseAndContext,
 } from '@solana/web3.js'
+import Session from '../../models/Session';
 
 
 const PROVIDERS: { [key: string]: string } = {
@@ -107,6 +108,7 @@ class Wallet {
         try {
             const data = new TextEncoder().encode('$GRAPE');
             const signed = await this.wallet.sign(data, 'utf8');
+            //this.wallet.popup.focus();
             const signature = signed.signature;
             const publicKey = this.publicKey.toBase58();
             const address = this.publicKey.toBuffer();
@@ -125,29 +127,16 @@ class Wallet {
             });
 
             const session = await response.json();
+            session.token = {address, signature};
+            session.publicKey = publicKey;
 
-            return {
-                user: {
-                    userId: session.userId,
-                    discordId: session.discordId,
-                    twitterId: session.twitterId
-                },
-                servers: session.servers,
-                userServers: session.userServers,
-                wallets: session.wallets,
-                token: {
-                    signature,
-                    address,
-                },
-                publicKey,
-                isConnected: true
-            };
+            return new Session(session);
         } catch (e) {
             console.warn(e);
         }
-    } 
+    }
 
-    async register(token:string, userId: string) {
+    async register(token: string, userId: string) {
         try {
             const data = new TextEncoder().encode('$GRAPE');
             const signed = await this.wallet.sign(data, 'utf8');
@@ -170,27 +159,14 @@ class Wallet {
             });
 
             const session = await response.json();
-
-            return {
-                user: {
-                    userId: session.userId,
-                    discordId: session.discordId,
-                    twitterId: session.twitterId
-                },
-                servers: session.servers,
-                userServers: session.userServers,
-                wallets: session.wallets,
-                token: {
-                    signature,
-                    address,
-                },
-                publicKey,
-                isConnected: true
-            };
+            session.token = {address, signature};
+            session.publicKey = publicKey;
+            
+            return new Session(session);
         } catch (e) {
             console.warn(e);
         }
-    } 
+    }
 }
 
 export default Wallet;
