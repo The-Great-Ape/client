@@ -172,20 +172,31 @@ export const PortfolioView = () => {
   }
 
   useEffect(() => {
+
     const fetchData = async () => {
-      const data = await fetchBalances();
-      const formattedData = data.map((token) => {
+      const priceData = await fetchPriceList();
+      setPriceList(priceData);
+
+      const balanceData = await fetchBalances();
+      const formattedData = balanceData.map((token) => {
+        var mint = token.account.data.parsed.info.mint;
+        var balance = token.account.data.parsed.info.tokenAmount.uiAmount;
+        var price = priceData.find(price => price.mint === token.account.data.parsed.info.mint);
         return {
-          mint: token.account.data.parsed.info.mint,
-          balance: token.account.data.parsed.info.tokenAmount.uiAmount,
+          mint: mint,
+          balance: balance,
+          price: price && price.price,
+          value: price && price.price * balance,
         };
       }).filter((token) => {
-        return token.balance > 0;
+        return token.balance > 0 && typeof token.price !== "undefined";
       });
       console.log("here", formattedData);
       setBalances(formattedData);
     };
+
     if (session.publicKey) fetchData();
+
   }, []);
 
   useEffect(() => {
@@ -200,11 +211,6 @@ export const PortfolioView = () => {
   }, [setTokenMap]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchPriceList();
-      setPriceList(data);
-    }
-    fetchData();
   }, []);
 
   console.log("balances", balances);
@@ -248,6 +254,8 @@ export const PortfolioView = () => {
                     <Icon mint={token.mint} tokenMap={tokenMap} />
                   </TableCell>
                   <TableCell>{token.balance}</TableCell>
+                  <TableCell>{token.price && `$${token.price.toFixed(2)}`}</TableCell>
+                  <TableCell>{token.value && `$${token.value.toFixed(2)}`}</TableCell>
                 </TableRow>
               ))}
 
