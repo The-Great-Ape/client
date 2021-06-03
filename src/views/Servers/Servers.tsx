@@ -15,6 +15,7 @@ import UserServer from '../../models/UserServer';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import DnsIcon from '@material-ui/icons/Dns';
 
 export const ServersView = (props: any) => {
   const [tab, setTab] = useState<number>(0);
@@ -74,27 +75,26 @@ export const ServersView = (props: any) => {
   return (
     <Container maxWidth="md" className="main">
       <Typography variant="h5" gutterBottom className="title">
-        Servers
+        <DnsIcon/> Servers
       </Typography>
-      <Divider variant="middle" />
       <br />
 
-      <div className="tabs">
+      <Paper className="tabs" elevation={4}>
 
-        <AppBar position="static" color="primary">
+        <AppBar position="static" color="primary" elevation={0}>
           <Tabs value={tab} onChange={handleChange} aria-label="simple tabs example">
             <Tab label="Registered" />
             <Tab label="All" />
           </Tabs>
         </AppBar>
 
-        {tab === 0 && <TableContainer component={Paper}>
+        {tab === 0 && <TableContainer component={Paper} elevation={0}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="left" style={{ width: '1%' }}>Name</TableCell>
                 <TableCell align="left" style={{ width: '70%' }}></TableCell>
-                <TableCell align="left">Actions</TableCell>
+                <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -102,7 +102,7 @@ export const ServersView = (props: any) => {
                 <TableRow key={'discord'}>
                   <TableCell ><img src={`/server-logos/${server.logo}`} alt="logo" className="logo-small" /></TableCell>
                   <TableCell  >{server.name}</TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     <Button color="primary" size="small" variant="contained" onClick={() => unregister(server.serverId, index)}>Unregister</Button>
                   </TableCell>
                 </TableRow>
@@ -111,13 +111,13 @@ export const ServersView = (props: any) => {
           </Table>
         </TableContainer>}
 
-        {tab === 1 && <TableContainer component={Paper}>
+        {tab === 1 && <TableContainer component={Paper} elevation={0}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="left" style={{ width: '1%' }}>Name</TableCell>
                 <TableCell align="left" style={{ width: '70%' }}></TableCell>
-                <TableCell align="left">Actions</TableCell>
+                <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -125,7 +125,7 @@ export const ServersView = (props: any) => {
                 <TableRow key={'discord'}>
                   <TableCell ><img src={`/server-logos/${server.logo}`} alt="logo" className="logo-small" /></TableCell>
                   <TableCell  >{server.name}</TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     <Button color="primary" size="small" variant="contained" onClick={() => register(server.serverId)} disabled={server.registered}>Register</Button>
                   </TableCell>
                 </TableRow>
@@ -133,7 +133,7 @@ export const ServersView = (props: any) => {
             </TableBody>
           </Table>
         </TableContainer>}
-      </div>
+      </Paper>
     </Container >
   );
 }

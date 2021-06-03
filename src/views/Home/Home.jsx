@@ -16,22 +16,17 @@ export const HomeView = (props) => {
   const publicKey = session && session.publicKey;
   return (
     <div className="home">
-      <Grid container spacing={3}>
+      {isConnected ? <Grid container spacing={3}>
         <Grid item md={6} sm={12}>
-          {/* <Box>{isConnected ? publicKey : 'Not connected'}</Box> */}
-          <Container maxWidth="md" className="main">
-            <PortfolioView />
-          </Container>
+          <PortfolioView/>
         </Grid>
         <Grid item md={6} sm={12}>
           <ServersView />
           <SettingsView />
         </Grid>
-      </Grid>
-      {/* <Wallet token={token} avatar={avatar} discordId={discordId} /> */}
-      {/* {isConnected ? 'Connected' : 'Not Connected'} */}
-      {/* <Container maxWidth="md" className="main">
-         <Box>{isConnected ? publicKey : 'Not connected'}</Box> */}
+      </Grid> : <Container maxWidth="md" className="main">
+        <Box>{'Not connected'}</Box>
+      </Container>}
     </div>
   );
 }

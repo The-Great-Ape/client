@@ -15,6 +15,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { useSession } from "../../contexts/session";
 import User from '../../models/User';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 export const SettingsView = () => {
   const [tab, setTab] = useState<number>(0);
@@ -44,13 +45,12 @@ export const SettingsView = () => {
   return (
     <Container maxWidth="md" className="main">
       <Typography variant="h5" gutterBottom className="title">
-        Settings
+        <SettingsIcon/> Settings
       </Typography>
-      <Divider variant="middle" />
       <br />
-      <div className="tabs">
+      <Paper className="tabs" elevation={4}>
 
-        <AppBar position="static" color="primary">
+        <AppBar position="static" color="primary" elevation={0}>
           <Tabs value={tab} onChange={handleChange} aria-label="simple tabs example">
             <Tab label="Accounts" />
             <Tab label="Wallets" />
@@ -58,7 +58,7 @@ export const SettingsView = () => {
         </AppBar>
 
         {tab === 0 && <div>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} elevation={0}>
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -70,7 +70,7 @@ export const SettingsView = () => {
               <TableBody>
 
                 <TableRow key={'discord'}>
-                  <TableCell component="th" scope="row"> Discord</TableCell>
+                  <TableCell component="th" scope="row"><img src="/discord_icon.svg" className="media-icon" alt="discord"/> Discord</TableCell>
                   <TableCell align="right">{discord || <i>Not linked</i>}</TableCell>
                   <TableCell align="right">
                     {!discord && <a href={`${process.env.REACT_APP_API_URL}/discord?user_id=${userId}`}><Button color="primary" size="small" variant="contained">Link Discord</Button></a>}
@@ -79,7 +79,7 @@ export const SettingsView = () => {
                 </TableRow>
 
                 <TableRow key={'twitter'}>
-                  <TableCell component="th" scope="row">Twitter</TableCell>
+                  <TableCell component="th" scope="row"><img src="/twitter_icon.svg" className="media-icon" alt="twitter"/> Twitter</TableCell>
                   <TableCell align="right"><i>Not linked</i></TableCell>
                   <TableCell align="right">
                     <Button color="primary" size="small" variant="contained" title="Connect" disabled>Coming Soon</Button>
@@ -93,7 +93,7 @@ export const SettingsView = () => {
 
         {tab === 1 && <div>
 
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} elevation={0}>
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -116,7 +116,7 @@ export const SettingsView = () => {
             </Table>
           </TableContainer>
         </div>}
-      </div>
+      </Paper>
     </Container>
   );
 }

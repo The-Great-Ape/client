@@ -62,7 +62,7 @@ export function Header(props: any) {
     }
 
     function trimAddress(addr: string) {
-        let start = addr.substring(0, 4);
+        let start = addr.substring(0, 8);
         let end = addr.substring(addr.length - 4);
         return `${start}...${end}`;
     }
@@ -79,17 +79,16 @@ export function Header(props: any) {
     };
 
     return (
-        <AppBar position="absolute" className="header" elevation={8}>
+        <AppBar position="absolute" className="header" elevation={0}>
             <Toolbar className="header">
                 <img src="/grape_logo.svg" className="header-logo" alt="logo" />
                 <Typography component="h1" variant="h6" color="inherit" className={classes.title} noWrap>
-                    Grape
                 </Typography>
-                {isConnected && <div className="header-menu">
+                {/* {isConnected && <div className="header-menu">
                     {routes.map(route =>
                         <Link to={route.path} ><Button className={"header-menu-item " + (route.path === currPath ? "active" : "")}>{route.name}</Button></Link>
                     )}
-                </div>}
+                </div>} */}
                 <div className="header-action">
                     {(isConnected || !userId) && <Button
                         aria-controls={menuId}

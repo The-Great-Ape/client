@@ -23,6 +23,7 @@ import LastPageIcon from "@material-ui/icons/LastPage";
 import { Box, Circle } from "../../components";
 import { useSession } from "../../contexts/session";
 import User from "../../models/User";
+import AssessmentIcon from '@material-ui/icons/Assessment';
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -106,15 +107,15 @@ const Icon = (props) => {
 
   return (
     <>
-  <img style={{
-    width: "28px",
-    height: "28px"
-  }} src={token.logoURI} />
-    <span style={{marginLeft: "20px"}}>
-  {token.name}
-      
-    </span>
-  </>
+      <img style={{
+        width: "28px",
+        height: "28px"
+      }} src={token.logoURI} />
+      <span style={{ marginLeft: "20px" }}>
+        {token.name}
+
+      </span>
+    </>
   );
 };
 
@@ -161,7 +162,7 @@ export const PortfolioView = () => {
     const theOwner = body.params[0];
     return resultValues;
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchBalances();
@@ -175,7 +176,7 @@ export const PortfolioView = () => {
       console.log("tokenList", tokenList);
       setBalances(formattedData);
     };
-    if(session.publicKey) fetchData();
+    if (session.publicKey) fetchData();
   }, []);
 
   useEffect(() => {
@@ -185,7 +186,7 @@ export const PortfolioView = () => {
       setTokenMap(tokenList.reduce((map, item) => {
         map.set(item.address, item);
         return map;
-      },new Map()));
+      }, new Map()));
     });
   }, [setTokenMap]);
 
@@ -193,71 +194,73 @@ export const PortfolioView = () => {
   return (
     <Container maxWidth="md" className="main">
       <Typography variant="h5" gutterBottom className="title">
-        Portfolio
+        <AssessmentIcon /> Portfolio
       </Typography>
-      <Divider variant="middle" />
       <br />
 
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="custom pagination table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left" style={{ width: "60%" }}>
-                Asset
+      <div className="tabs">
+        <TableContainer component={Paper} elevation={0}>
+          <Table className={classes.table} aria-label="custom pagination table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left" style={{ width: "60%" }}>
+                  Asset
               </TableCell>
-              <TableCell align="left" style={{ width: "20%" }}>
-                Balance
+                <TableCell align="left" style={{ width: "20%" }}>
+                  Balance
               </TableCell>
-              <TableCell align="left" style={{ width: "5%" }}>
-                Price
+                <TableCell align="left" style={{ width: "5%" }}>
+                  Price
               </TableCell>
-              <TableCell align="right" style={{ width: "5%" }}>
-                Value
+                <TableCell align="right" style={{ width: "5%" }}>
+                  Value
               </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? balances.slice(
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {(rowsPerPage > 0
+                ? balances.slice(
                   page * rowsPerPage,
                   page * rowsPerPage + rowsPerPage
                 )
-              : balances
-            ).map((token, i) => (
-              <TableRow key={i}>
-                <TableCell>
-                  <Icon mint={token.mint} tokenMap={tokenMap}/>
-                </TableCell>
-                <TableCell>{token.balance}</TableCell>
-              </TableRow>
-            ))}
+                : balances
+              ).map((token, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <Icon mint={token.mint} tokenMap={tokenMap} />
+                  </TableCell>
+                  <TableCell>{token.balance}</TableCell>
+                </TableRow>
+              ))}
 
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                  colSpan={3}
+                  count={balances.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: { "aria-label": "rows per page" },
+                    native: true,
+                  }}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
               </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={3}
-                count={balances.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { "aria-label": "rows per page" },
-                  native: true,
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+      </div>
+
     </Container>
   );
 };
