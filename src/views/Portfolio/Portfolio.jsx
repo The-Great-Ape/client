@@ -171,6 +171,8 @@ export const PortfolioView = () => {
           mint: token.account.data.parsed.info.mint,
           balance: token.account.data.parsed.info.tokenAmount.uiAmount,
         };
+      }).filter((token) => {
+        return token.balance > 0;
       });
       console.log("here", formattedData);
       console.log("tokenList", tokenList);
