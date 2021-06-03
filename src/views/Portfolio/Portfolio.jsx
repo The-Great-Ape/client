@@ -175,7 +175,7 @@ export const PortfolioView = () => {
       console.log("tokenList", tokenList);
       setBalances(formattedData);
     };
-    fetchData();
+    if(session.publicKey) fetchData();
   }, []);
 
   useEffect(() => {
