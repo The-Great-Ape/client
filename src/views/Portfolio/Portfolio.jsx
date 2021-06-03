@@ -122,8 +122,8 @@ const Icon = (props) => {
 export const PortfolioView = () => {
   const classes = useStyles2();
   const [balances, setBalances] = useState([]);
-  const [tokenList, setTokenList] = useState([]);
   const [tokenMap, setTokenMap] = useState(new Map());
+  const [priceList, setPriceList] = useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(0);
   const { session, setSession } = useSession();
@@ -162,6 +162,15 @@ export const PortfolioView = () => {
     return resultValues;
   };
 
+  const fetchPriceList = async () => {
+    const response = await fetch("https://price-api.sonar.watch/prices", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const json = await response.json();
+      return json;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchBalances();
@@ -174,7 +183,6 @@ export const PortfolioView = () => {
         return token.balance > 0;
       });
       console.log("here", formattedData);
-      console.log("tokenList", tokenList);
       setBalances(formattedData);
     };
     if (session.publicKey) fetchData();
@@ -191,9 +199,16 @@ export const PortfolioView = () => {
     });
   }, [setTokenMap]);
 
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchPriceList();
+      setPriceList(data);
+    }
+    fetchData();
+  }, []);
 
   console.log("balances", balances);
+  console.log("priceList", priceList);
   return (
     <Container maxWidth="md" className="main">
       <Typography variant="h5" gutterBottom className="title">
