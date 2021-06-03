@@ -121,6 +121,7 @@ const Icon = (props) => {
 
 export const PortfolioView = () => {
   const classes = useStyles2();
+  const [portfolioTotal, setPortfolioTotal] = useState(0);
   const [balances, setBalances] = useState([]);
   const [tokenMap, setTokenMap] = useState(new Map());
   const [priceList, setPriceList] = useState([]);
@@ -193,6 +194,11 @@ export const PortfolioView = () => {
       });
       console.log("here", formattedData);
       setBalances(formattedData);
+
+      const portfolioTotal = formattedData.reduce((acc, token) => {
+        return acc + token.value;
+      }, 0);
+      setPortfolioTotal(portfolioTotal);
     };
 
     if (session.publicKey) fetchData();
@@ -215,10 +221,11 @@ export const PortfolioView = () => {
 
   console.log("balances", balances);
   console.log("priceList", priceList);
+  console.log("portfolioTotal", portfolioTotal);
   return (
     <Container maxWidth="md" className="main">
       <Typography variant="h5" gutterBottom className="title">
-        <AssessmentIcon /> Portfolio
+        <AssessmentIcon /> Portfolio {`$${portfolioTotal.toFixed(2)}`}
       </Typography>
       <br />
 
