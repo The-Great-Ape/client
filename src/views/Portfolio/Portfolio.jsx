@@ -158,8 +158,7 @@ export const PortfolioView = () => {
       headers: { "Content-Type": "application/json" },
     });
     const json = await response.json();
-    const resultValues = json.result.value;
-    const theOwner = body.params[0];
+    const resultValues = json.result.value
     return resultValues;
   };
 
@@ -191,6 +190,8 @@ export const PortfolioView = () => {
       }, new Map()));
     });
   }, [setTokenMap]);
+
+
 
   console.log("balances", balances);
   return (
