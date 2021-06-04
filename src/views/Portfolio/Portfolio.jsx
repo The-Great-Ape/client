@@ -260,7 +260,7 @@ export const PortfolioView = () => {
                   <TableCell>
                     <Icon mint={token.mint} tokenMap={tokenMap} />
                   </TableCell>
-                  <TableCell>{token.balance}</TableCell>
+                  <TableCell>{token.balance && token.balance.toFixed(2)}</TableCell>
                   <TableCell>{token.price && `$${token.price.toFixed(2)}`}</TableCell>
                   <TableCell>{token.value && `$${token.value.toFixed(2)}`}</TableCell>
                 </TableRow>
