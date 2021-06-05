@@ -21,21 +21,39 @@ export function RegisterView(props: any) {
     const [provider, setProvider] = React.useState(getParam('provider'));
     const [serverName, setServerName] = React.useState(getParam('serverName'));
     const [serverLogo, setServerLogo] = React.useState(decodeURIComponent(getParam('serverLogo')));
+    const [isRegistered, setIsRegistered] = React.useState(decodeURIComponent(getParam('is_registered')));
 
     const { session, setSession } = useSession();
     const isConnected = session && session.isConnected;
+    const isAlreadyRegistered = isRegistered && isRegistered === "true";
 
     async function register() {
         let wallet = new Wallet();
-        wallet.onChange = (wallet) => onWalletConnect(wallet);
+        wallet.onChange = (wallet) => onWalletRegister(wallet);
 
+        await wallet.connect();
+    }
+
+    async function onWalletRegister(wallet: any){
+        if(wallet){
+            wallet.wallet._popup.focus();
+            let session = await wallet.register('$GRAPE', userId);
+            if(session){
+                setSession(session);
+            }
+        }
+    }
+
+    async function connect() {
+        let wallet = new Wallet();
+        wallet.onChange = (wallet) => onWalletConnect(wallet);
         await wallet.connect();
     }
 
     async function onWalletConnect(wallet: any){
         if(wallet){
             wallet.wallet._popup.focus();
-            let session = await wallet.register('$GRAPE', userId);
+            let session = await wallet.signMessage('$GRAPE');
             if(session){
                 setSession(session);
             }
@@ -63,8 +81,19 @@ export function RegisterView(props: any) {
                 </div>
 
                 <br />
-                {!isConnected ? <Button color="primary" size="large" variant="contained" onClick={register}>Link Wallet</Button> : <div>Registered!<br /><br/>
-                    <Link to='/'><Button color="primary" size="medium" variant="contained" title="Connect">Home</Button></Link>
+                {!isAlreadyRegistered ? 
+                <div>
+                    {!isConnected ? <Button color="primary" size="large" variant="contained" onClick={register}>Link Wallet</Button> : 
+                    <div>Registered!<br /><br/>
+                        <Link to='/'><Button color="primary" size="medium" variant="contained" title="Connect">Home</Button></Link>
+                    </div>}
+                </div> : 
+                <div>
+                     {!isConnected ? 
+                         <div>Your wallet is already linked!<br /><br/>
+                     <Button color="primary" size="large" variant="contained" onClick={connect}>Connect</Button></div> : 
+                        <Link to='/'><Button color="primary" size="medium" variant="contained" title="Connect">Home</Button></Link>
+                    }
                 </div>}
             </Box>
         </Container>
