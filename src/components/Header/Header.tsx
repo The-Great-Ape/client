@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 export function Header(props: any) {
     const classes = useStyles();
-    const [wallet, setWallet] = useState<Wallet | null>();
     const { session, setSession } = useSession();
     const [userId, setUserId] = React.useState(getParam('user_id'));
     const [providers, setProviders] = React.useState(['Sollet', 'Sollet Extension', 'Phantom']);
@@ -55,20 +54,18 @@ export function Header(props: any) {
 
     async function connect() {
         let wallet = new Wallet();
-        wallet.onChange = (wallet) => onWalletChange(wallet);
-
+        wallet.onChange = (wallet) => onWalletConnect(wallet);
         await wallet.connect();
-        //wallet.wallet._popup.focus();
-        //setWallet(wallet);
-        //let session = await wallet.signMessage('$GRAPE');
-
     }
 
-    function onWalletChange(wallet: any){
-        if(wallet.session){
-            setSession(wallet.session);
+    async function onWalletConnect(wallet: any){
+        if(wallet){
+            wallet.wallet._popup.focus();
+            let session = await wallet.signMessage('$GRAPE');
+            if(session){
+                setSession(session);
+            }
         }
-        setWallet(wallet);
     }
 
     async function disconnect() {

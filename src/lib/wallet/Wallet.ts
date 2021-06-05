@@ -54,7 +54,6 @@ class Wallet {
     async onConnect(publicKey: PublicKey) {
         this.publicKey = publicKey;
         this.isConnected = true;
-        this.session = await this.signMessage('$GRAPE');
         this.onChange(this);
     }
 

@@ -23,19 +23,28 @@ export function RegisterView(props: any) {
     const [serverLogo, setServerLogo] = React.useState(decodeURIComponent(getParam('serverLogo')));
 
     const { session, setSession } = useSession();
-    const [wallet, setWallet] = useState<Wallet | null>();
     const isConnected = session && session.isConnected;
 
     async function register() {
         let wallet = new Wallet();
-        wallet.onChange = (wallet) => setWallet(wallet);
+        wallet.onChange = (wallet) => onWalletConnect(wallet);
 
         await wallet.connect();
-        wallet.wallet._popup.focus();
-        setWallet(wallet);
-        let session = await wallet.register('$GRAPE', userId);
-        setSession(session);
     }
+
+    async function onWalletConnect(wallet: any){
+        if(wallet){
+            wallet.wallet._popup.focus();
+            let session = await wallet.register('$GRAPE', userId);
+            if(session){
+                setSession(session);
+            }
+        }
+    }
+
+    useEffect(() => {
+        setSession(null);
+      }, [setSession]);
 
     return (
         <Container maxWidth="md" className="register">
