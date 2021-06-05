@@ -10,6 +10,12 @@ import { useSession } from "../../contexts/session";
 import { useLocation } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import './Header.less';
 
@@ -31,6 +37,9 @@ export function Header(props: any) {
     const [wallet, setWallet] = useState<Wallet | null>();
     const { session, setSession } = useSession();
     const [userId, setUserId] = React.useState(getParam('user_id'));
+    const [providers, setProviders] = React.useState(['Sollet', 'Sollet Extension', 'Phantom']);
+    const [open, setOpen] = React.useState(false);
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
 
@@ -46,14 +55,20 @@ export function Header(props: any) {
 
     async function connect() {
         let wallet = new Wallet();
-        wallet.onChange = (wallet) => setWallet(wallet);
+        wallet.onChange = (wallet) => onWalletChange(wallet);
 
         await wallet.connect();
-        wallet.wallet._popup.focus();
+        //wallet.wallet._popup.focus();
+        //setWallet(wallet);
+        //let session = await wallet.signMessage('$GRAPE');
 
+    }
+
+    function onWalletChange(wallet: any){
+        if(wallet.session){
+            setSession(wallet.session);
+        }
         setWallet(wallet);
-        let session = await wallet.signMessage('$GRAPE');
-        setSession(session);
     }
 
     async function disconnect() {
@@ -78,6 +93,41 @@ export function Header(props: any) {
         setAnchorEl(null);
     };
 
+    const handleClickOpen = () => {
+        connect();
+    };
+
+    const handleClose = (value: any) => {
+        setOpen(false);
+    };
+
+    function SimpleDialog(props: any) {
+        const { onClose, selectedValue, open } = props;
+
+        const handleClose = () => {
+            onClose(selectedValue);
+        };
+
+        const handleListItemClick = (value: any) => {
+            onClose(value);
+        };
+
+        return (
+            <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+                <DialogTitle id="simple-dialog-title">Select Wallet</DialogTitle>
+                <List>
+                    {providers.map((provider) => (
+                        <ListItem button onClick={() => handleListItemClick(provider)} key={provider}>
+
+                            <ListItemText primary={provider} />
+                        </ListItem>
+                    ))}
+                </List>
+            </Dialog>
+        );
+    }
+
+
     return (
         <AppBar position="absolute" className="header" elevation={0}>
             <Toolbar className="header">
@@ -93,7 +143,7 @@ export function Header(props: any) {
                     {(isConnected || !userId) && <Button
                         aria-controls={menuId}
                         aria-haspopup="true"
-                        color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? handleProfileMenuOpen : connect}>
+                        color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? handleProfileMenuOpen : handleClickOpen}>
                         {isConnected ? session && trimAddress(session.publicKey) : 'Connect'}
                     </Button>}
                     <Menu
@@ -107,6 +157,9 @@ export function Header(props: any) {
                     >
                         <MenuItem onClick={disconnect}>Disconnect</MenuItem>
                     </Menu>
+
+                    <SimpleDialog open={open} onClose={handleClose} />
+
                 </div>
             </Toolbar>
         </AppBar>

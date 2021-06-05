@@ -1,11 +1,13 @@
 import React from "react";
+import Paper from "@material-ui/core/Paper";
+
 import './Box.less';
 
 export const Box: React.FC = ({ children }) => {
     return (
-        <div className="box">
+        <Paper className="box" elevation={4}>
             {children}
-        </div>
+        </Paper>
     );
 };
 

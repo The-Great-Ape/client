@@ -40,7 +40,7 @@ export function RegisterView(props: any) {
     return (
         <Container maxWidth="md" className="register">
             <Box>
-                <div className="title">
+                <div className="title-center">
                     <Typography variant="h5" gutterBottom>
                         Register Wallet with <br /> {serverName}
                     </Typography>
@@ -54,7 +54,9 @@ export function RegisterView(props: any) {
                 </div>
 
                 <br />
-                {!isConnected ? <Button color="primary" size="large" variant="contained" onClick={register}>Link Wallet</Button> : <div>Registered!</div>}
+                {!isConnected ? <Button color="primary" size="large" variant="contained" onClick={register}>Link Wallet</Button> : <div>Registered!<br /><br/>
+                    <Link to='/'><Button color="primary" size="medium" variant="contained" title="Connect">Home</Button></Link>
+                </div>}
             </Box>
         </Container>
     );

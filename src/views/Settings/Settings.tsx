@@ -108,7 +108,7 @@ export const SettingsView = () => {
                     <TableCell component="th" scope="row">{wallet.address}</TableCell>
                     <TableCell align="right">Sollet</TableCell>
                     <TableCell align="right">
-                      <Button color="primary" size="small" variant="contained" title="Connect">Remove</Button>
+                      <Button color="primary" size="small" variant="contained" title="Connect" disabled>Primary</Button>
                     </TableCell>
                   </TableRow>
                 })}

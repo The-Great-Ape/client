@@ -16,7 +16,7 @@ import Session from '../../models/Session';
 
 
 const PROVIDERS: { [key: string]: string } = {
-    SOLLET: "https://www.sollet.io"
+    SOLLET: "https://www.sollet.io",
 };
 
 const NETWORKS: { [key: string]: Cluster } = {
@@ -31,13 +31,19 @@ class Wallet {
     publicKey: PublicKey;
     isConnected: boolean;
     discordInfo: Object;
+    session: Object;
     onChange: (wallet: Wallet | null) => void;
 
     //Constructor
     constructor(provider: string = "SOLLET", network: string = "MAINNET") {
         let providerUrl = PROVIDERS[provider];
         this.connection = new Connection(clusterApiUrl(NETWORKS["MAINNET"]));
+
+        // switch(provider){
+
+        // }
         this.wallet = new SolanaWalletAdapter(providerUrl);
+        //this.wallet = new SolanaWalletAdapter((window as any).sollet);
         this.discordInfo = null;
         this.onChange = () => { };
         this.wallet.on('connect', this.onConnect.bind(this));
@@ -48,8 +54,8 @@ class Wallet {
     async onConnect(publicKey: PublicKey) {
         this.publicKey = publicKey;
         this.isConnected = true;
+        this.session = await this.signMessage('$GRAPE');
         this.onChange(this);
-        console.log('Connected to ' + publicKey.toBase58());
     }
 
 
