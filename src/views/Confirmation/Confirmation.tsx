@@ -27,14 +27,14 @@ export const ConfirmationView = () => {
     return (
         <Container maxWidth="md" className="confirmation">
             <Box>
-                <div className="title">
+                <div className="title-center">
                     <Typography variant="h5" gutterBottom>
                         {provider} linked!
                     </Typography>
                 </div>
 
                 <div className="overlap">
-                    <Circle padding={true}><img src="/grape_logo.svg" alt="grape-logo" /></Circle>
+                    <Circle padding={true}><img src="/grape_logo_simple.png" alt="grape-logo" /></Circle>
                     <Circle padding={false}>
                         {provider === 'discord' && <img src={`https://cdn.discordapp.com/avatars/${discordId}/${avatar}?size=512`} alt="avatar" />}
                     </Circle>
