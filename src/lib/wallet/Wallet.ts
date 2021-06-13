@@ -42,8 +42,14 @@ class Wallet {
         // switch(provider){
 
         // }
-        this.wallet = new SolanaWalletAdapter(providerUrl);
-        //this.wallet = new SolanaWalletAdapter((window as any).sollet);
+
+        if ((window as any).sollet){
+            this.wallet = new SolanaWalletAdapter((window as any).sollet);
+
+        }else{
+            this.wallet = new SolanaWalletAdapter(providerUrl);
+        }
+
         this.discordInfo = null;
         this.onChange = () => { };
         this.wallet.on('connect', this.onConnect.bind(this));
@@ -111,6 +117,10 @@ class Wallet {
 
     async signMessage(token: string) {
         try {
+            if (!(window as any).sollet){
+                this.wallet._popup.focus();
+            }
+    
             const data = new TextEncoder().encode('$GRAPE');
             const signed = await this.wallet.sign(data, 'utf8');
             //this.wallet.popup.focus();
@@ -143,6 +153,10 @@ class Wallet {
 
     async register(token: string, userId: string) {
         try {
+            if (!(window as any).sollet){
+                this.wallet._popup.focus();
+            }
+
             const data = new TextEncoder().encode('$GRAPE');
             const signed = await this.wallet.sign(data, 'utf8');
             const signature = signed.signature;

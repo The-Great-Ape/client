@@ -60,7 +60,6 @@ export function Header(props: any) {
 
     async function onWalletConnect(wallet: any){
         if(wallet){
-            wallet.wallet._popup.focus();
             let session = await wallet.signMessage('$GRAPE');
             if(session){
                 setSession(session);
