@@ -108,7 +108,7 @@ const Icon = (props) => {
         <>
             {tokenLogo ? <img className="media-icon" src={tokenLogo} alt="logo" /> : <HelpIcon />}
             <span style={{ marginLeft: "20px" }}>
-                {tokenName || trimAddress(token.mint)}
+                {tokenName || (token.mint && trimAddress(token.mint)) || ''}
             </span>
         </>
     );
@@ -150,6 +150,9 @@ export const PortfolioView = (props) => {
                         <TableCell align="right" style={{ width: "5%" }}>
                             Value
               </TableCell>
+              {props.isFarm && <TableCell>
+                    Pending Reward
+                  </TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -167,6 +170,7 @@ export const PortfolioView = (props) => {
                             <TableCell>{token.balance && token.balance.toFixed(2)}</TableCell>
                             <TableCell>{token.price && `$${token.price.toFixed(2)}`}</TableCell>
                             <TableCell>{token.value && `$${token.value.toFixed(2)}`}</TableCell>
+                            {props.isFarm && <TableCell>{token.pendingReward}</TableCell>}
                         </TableRow>
                     ))}
 

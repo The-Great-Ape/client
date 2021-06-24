@@ -116,10 +116,17 @@ class Wallet {
     }
 
     async signMessage(token: string) {
+        if (!(window as any).sollet){
+            this.wallet._popup.focus();
+
+        }else{
+            console.log(this.wallet.window);
+            window.focus()
+
+        }
+
         try {
-            if (!(window as any).sollet){
-                this.wallet._popup.focus();
-            }
+
     
             const data = new TextEncoder().encode('$GRAPE');
             const signed = await this.wallet.sign(data, 'utf8');
@@ -153,9 +160,9 @@ class Wallet {
 
     async register(token: string, userId: string) {
         try {
-            if (!(window as any).sollet){
+            //if (!(window as any).sollet){
                 this.wallet._popup.focus();
-            }
+            //}
 
             const data = new TextEncoder().encode('$GRAPE');
             const signed = await this.wallet.sign(data, 'utf8');
