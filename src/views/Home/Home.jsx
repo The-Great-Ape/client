@@ -17,10 +17,10 @@ export const HomeView = (props) => {
   return (
     <div className="home">
       {isConnected ? <Grid container spacing={3}>
-        <Grid item md={6} sm={12}>
+        <Grid item lg={6} md={12} sm={12}>
           <PortfolioView/>
         </Grid>
-        <Grid item md={6} sm={12}>
+        <Grid item lg={6} md={12} sm={12}>
           <ServersView />
           <SettingsView />
         </Grid>

@@ -1,5 +1,4 @@
-import { TokenAmount } from '@/utils/safe-math'
-import { cloneDeep } from 'lodash-es'
+import { TokenAmount } from './safe-math'
 
 export interface TokenInfo {
   symbol: string
@@ -30,10 +29,10 @@ export interface TokenInfo {
  */
 export function getTokenBySymbol(symbol: string): TokenInfo | null {
   if (symbol === 'SOL') {
-    return cloneDeep(NATIVE_SOL)
+    return Object.assign({},NATIVE_SOL)
   }
 
-  let token = cloneDeep(TOKENS[symbol])
+  let token = Object.assign({},TOKENS[symbol])
 
   if (!token) {
     token = null
@@ -51,10 +50,10 @@ export function getTokenBySymbol(symbol: string): TokenInfo | null {
  */
 export function getTokenByMintAddress(mintAddress: string): TokenInfo | null {
   if (mintAddress === NATIVE_SOL.mintAddress) {
-    return cloneDeep(NATIVE_SOL)
+    return Object.assign({},NATIVE_SOL)
   }
   const token = Object.values(TOKENS).find((item) => item.mintAddress === mintAddress)
-  return token ? cloneDeep(token) : null
+  return token ? Object.assign({},token) : null
 }
 
 export interface Tokens {

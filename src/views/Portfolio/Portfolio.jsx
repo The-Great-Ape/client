@@ -29,7 +29,6 @@ export const PortfolioView = () => {
   const [balances, setBalances] = useState(null);
   const [tokenMap, setTokenMap] = useState(new Map());
   const { session, setSession } = useSession();
-  let portfolioTotal = 0;
 
   //Get Balances RPC
   const fetchStaked = async () => {
@@ -176,13 +175,24 @@ export const PortfolioView = () => {
   };
 
   //Get Balances
+  let total = 0;
+  let portfolioTotal = 0; 
+  let stakedTotal = 0;
+
+
   if(!balances){
     getBalances();
     return <div/>
-  }else{
+  }else{   
     portfolioTotal = balances.portfolio.reduce((acc, token) => {
       return acc + token.value;
     }, 0);
+
+    stakedTotal = balances.staked.reduce((acc, token) => {
+        return acc + token.value;
+    }, 0);
+
+    total = portfolioTotal + stakedTotal;
   }
 
   return (
@@ -204,6 +214,7 @@ export const PortfolioView = () => {
         <br/>
       <Paper className="tabs" elevation={4}>
         <PortfolioTable balances={balances.staked} isFarm={true}/>
+        <AssessmentIcon /> Portfolio {`$${stakedTotal.toFixed(2)}`}
       </Paper>
     </Container>
   );

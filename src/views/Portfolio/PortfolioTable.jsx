@@ -162,7 +162,7 @@ export const PortfolioView = (props) => {
                                 <TableCell>{token.farmInfo && token.farmInfo.name}</TableCell>
                                 <TableCell>{token.balance && token.balance.toFixed(2)}</TableCell>
                                 <TableCell>{token.value && `$${token.value.toFixed(2)}`}</TableCell>
-                                <TableCell>{token.pendingReward}</TableCell>
+                                <TableCell align="right">{token.pendingReward}</TableCell>
                             </TableRow> : 
                             <TableRow key={i}>
                                 <TableCell>
@@ -171,7 +171,6 @@ export const PortfolioView = (props) => {
                                 <TableCell>{token.balance && token.balance.toFixed(2)}</TableCell>
                                 <TableCell>{token.price && `$${token.price.toFixed(2)}`}</TableCell>
                                 <TableCell>{token.value && `$${token.value.toFixed(2)}`}</TableCell>
-                                {props.isFarm && <TableCell>{token.pendingReward}</TableCell>}
                             </TableRow>})}
                     {emptyRows > 0 && (
                         <TableRow style={{ height: 53 * emptyRows }}>
