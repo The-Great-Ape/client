@@ -73,7 +73,7 @@ export const ServersView = (props: any) => {
   }, [session]);
 
   return (
-    <Container maxWidth="md" className="main">
+    <Container maxWidth="md" className="module">
       <Typography variant="h5" gutterBottom className="title">
         <DnsIcon/> Servers
       </Typography>

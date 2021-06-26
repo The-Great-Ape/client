@@ -43,7 +43,7 @@ export const SettingsView = () => {
   };
 
   return (
-    <Container maxWidth="md" className="main">
+    <Container maxWidth="md" className="module">
       <Typography variant="h5" gutterBottom className="title">
         <SettingsIcon/> Settings
       </Typography>

@@ -15,7 +15,7 @@ export const HomeView = (props) => {
   const isConnected = session && session.isConnected;
   const publicKey = session && session.publicKey;
   return (
-    <div className="home">
+    <div className="home main" >
       {isConnected ? <Grid container spacing={3}>
         <Grid item lg={6} md={12} sm={12}>
           <PortfolioView/>

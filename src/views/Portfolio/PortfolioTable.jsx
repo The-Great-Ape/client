@@ -104,9 +104,9 @@ const Icon = (props) => {
      const tokenLogo = tokenInfo && tokenInfo.logoURI;
      const tokenName = tokenInfo && tokenInfo.name;
 
-    if(!tokenInfo || !mint){
-        return <HelpIcon />;
-    }
+    // if(!tokenInfo || !mint){
+    //     return <HelpIcon />;
+    // }
 
     return (
         <>

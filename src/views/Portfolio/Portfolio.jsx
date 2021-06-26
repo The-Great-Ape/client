@@ -96,6 +96,29 @@ export const PortfolioView = () => {
     return resultValues;
   };
 
+  const fetchSOLBalance = async () => {
+    const body = {
+      method: "getBalance",
+      jsonrpc: "2.0",
+      params: [
+        // Get the public key of the account you want the balance for.
+        session.publicKey
+      ],
+      id: "35f0036a-3801-4485-b573-2bf29a7c77d2",
+    };
+
+    const response = await fetch("https://solana-api.projectserum.com/", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const json = await response.json();
+    console.log(json);
+    const resultValues = json.result.value
+    return resultValues;
+  };
+
   //Get Prices RPC
   const fetchPriceList = async () => {
     const response = await fetch("https://price-api.sonar.watch/prices", {
@@ -122,7 +145,8 @@ export const PortfolioView = () => {
   //Get Porfolio
   const getBalances = async () => {
 
-    let [portfolio, staked, priceData, tokenMap, pairsData] = await Promise.all([fetchBalances(), fetchStaked(), fetchPriceList(), fetchTokenMap(), fetchPairs()]);
+    let [portfolio, staked, sol, priceData, tokenMap, pairsData] = await Promise.all([fetchBalances(), fetchStaked(), fetchSOLBalance(), fetchPriceList(), fetchTokenMap(), fetchPairs()]);
+
 
     //Parse portfolio
     portfolio = portfolio.map((token) => {
@@ -138,7 +162,29 @@ export const PortfolioView = () => {
       };
     }).filter((token) => {
       return token.balance > 0 && typeof token.price !== "undefined";
-    });
+    })
+
+
+    if(sol){
+        sol = parseFloat(new TokenAmount(sol, 9).format());
+        const mint = 'So11111111111111111111111111111111111111112';
+        var price = priceData.find(price => price.mint === mint);
+        price = price && price.price;
+        let tokenInfo = tokenMap.get(mint);
+        tokenInfo.name = "SOL";
+
+        portfolio.push({
+            mint: mint,
+            balance: sol,
+            price,
+            value: price * sol,
+            tokenInfo: tokenInfo
+        });
+    }
+
+    portfolio = portfolio.sort(function(a, b) {
+        return b.value - a.value;
+    });;
 
     //Parse
     staked = staked.map((stakeAccountInfo) => {
@@ -148,7 +194,6 @@ export const PortfolioView = () => {
         const poolId = userStakeInfo.poolId.toBase58()
         const farm = getFarmByPoolId(poolId);
 
-        console.log(pairsData);
         const pair = pairsData.find(pair => pair.name === farm.name);
         
         let balance = new TokenAmount(userStakeInfo.depositBalance.toNumber(), 6)
@@ -165,7 +210,9 @@ export const PortfolioView = () => {
             value : pair.price * balance,
             farmInfo: farm
         }
-    });
+    }).filter((token) => {
+        return token.balance > 0;
+      });;
     
     setBalances({
         portfolio,
@@ -196,8 +243,10 @@ export const PortfolioView = () => {
   }
 
   return (
-    <Container maxWidth="md" className="main">
-      <Typography variant="h5" gutterBottom className="title">
+    <Container maxWidth="md">
+
+        <div className="module">
+        <Typography variant="h5" gutterBottom className="title">
         <AssessmentIcon /> Portfolio {`$${portfolioTotal.toFixed(2)}`}
       </Typography>
       <br />
@@ -205,16 +254,18 @@ export const PortfolioView = () => {
       <Paper className="tabs" elevation={4}>
         <PortfolioTable balances={balances.portfolio}/>
       </Paper>
-      <br />
-      <br />
+        </div>
 
-      <Typography variant="h5" gutterBottom className="title">
-        <AssessmentIcon /> Farms 
-      </Typography>
-        <br/>
-      <Paper className="tabs" elevation={4}>
-        <PortfolioTable balances={balances.staked} isFarm={true}/>
-      </Paper>
+   
+        {(balances.staked && balances.staked.length) ? <div className="module">
+            <Typography variant="h5" gutterBottom className="title">
+            <AssessmentIcon /> Farms 
+            </Typography>
+            <br/>
+            <Paper className="tabs" elevation={4}>
+                <PortfolioTable balances={balances.staked} isFarm={true}/>
+            </Paper>
+        </div> : <div/>}
     </Container>
   );
 };
