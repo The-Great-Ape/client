@@ -214,7 +214,6 @@ export const PortfolioView = () => {
         <br/>
       <Paper className="tabs" elevation={4}>
         <PortfolioTable balances={balances.staked} isFarm={true}/>
-        <AssessmentIcon /> Portfolio {`$${stakedTotal.toFixed(2)}`}
       </Paper>
     </Container>
   );
