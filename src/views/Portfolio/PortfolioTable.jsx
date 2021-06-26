@@ -93,22 +93,26 @@ const useStyles2 = makeStyles({
 });
 
 function trimAddress(addr) {
+    if (!addr) return addr;
     let start = addr.substring(0, 8);
     let end = addr.substring(addr.length - 4);
     return `${start}...${end}`;
 }
 
 const Icon = (props) => {
-    const token = props.token;
-    const tokenInfo = token && token.tokenInfo;
-    const tokenLogo = tokenInfo && tokenInfo.logoURI;
-    const tokenName = tokenInfo && tokenInfo.name;
+     const {tokenInfo, mint} = props;
+     const tokenLogo = tokenInfo && tokenInfo.logoURI;
+     const tokenName = tokenInfo && tokenInfo.name;
+
+    if(!tokenInfo || !mint){
+        return <HelpIcon />;
+    }
 
     return (
         <>
             {tokenLogo ? <img className="media-icon" src={tokenLogo} alt="logo" /> : <HelpIcon />}
             <span style={{ marginLeft: "20px" }}>
-                {tokenName || (token.mint && trimAddress(token.mint)) || ''}
+                {tokenName || (mint && trimAddress(mint)) || ''}
             </span>
         </>
     );
@@ -138,21 +142,11 @@ export const PortfolioView = (props) => {
             <Table className={classes.table} aria-label="custom pagination table">
                 <TableHead>
                     <TableRow>
-                        <TableCell align="left" style={{ width: "60%" }}>
-                            Asset
-              </TableCell>
-                        <TableCell align="left" style={{ width: "20%" }}>
-                            Balance
-              </TableCell>
-                        <TableCell align="left" style={{ width: "5%" }}>
-                            Price
-              </TableCell>
-                        <TableCell align="right" style={{ width: "5%" }}>
-                            Value
-              </TableCell>
-              {props.isFarm && <TableCell>
-                    Pending Reward
-                  </TableCell>}
+                        <TableCell align="left" style={{ width: "60%" }}>Asset</TableCell>
+                        <TableCell align="left" style={{ width: "20%" }}>Balance</TableCell>
+                        {!props.isFarm && <TableCell align="left" style={{ width: "5%" }}>Price</TableCell>}
+                        <TableCell align="right" style={{ width: "5%" }}>Value</TableCell>
+                        {props.isFarm && <TableCell align="right">Pending Reward</TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -162,18 +156,23 @@ export const PortfolioView = (props) => {
                             page * rowsPerPage + rowsPerPage
                         )
                         : balances
-                    ).map((token, i) => (
-                        <TableRow key={i}>
-                            <TableCell>
-                                <Icon token={token} />
-                            </TableCell>
-                            <TableCell>{token.balance && token.balance.toFixed(2)}</TableCell>
-                            <TableCell>{token.price && `$${token.price.toFixed(2)}`}</TableCell>
-                            <TableCell>{token.value && `$${token.value.toFixed(2)}`}</TableCell>
-                            {props.isFarm && <TableCell>{token.pendingReward}</TableCell>}
-                        </TableRow>
-                    ))}
-
+                    ).map((token, i) => {
+                        return props.isFarm ? 
+                            <TableRow key={i}>
+                                <TableCell>{token.farmInfo && token.farmInfo.name}</TableCell>
+                                <TableCell>{token.balance && token.balance.toFixed(2)}</TableCell>
+                                <TableCell>{token.value && `$${token.value.toFixed(2)}`}</TableCell>
+                                <TableCell>{token.pendingReward}</TableCell>
+                            </TableRow> : 
+                            <TableRow key={i}>
+                                <TableCell>
+                                    <Icon tokenInfo={token.tokenInfo} mint={token.mint} />
+                                </TableCell>
+                                <TableCell>{token.balance && token.balance.toFixed(2)}</TableCell>
+                                <TableCell>{token.price && `$${token.price.toFixed(2)}`}</TableCell>
+                                <TableCell>{token.value && `$${token.value.toFixed(2)}`}</TableCell>
+                                {props.isFarm && <TableCell>{token.pendingReward}</TableCell>}
+                            </TableRow>})}
                     {emptyRows > 0 && (
                         <TableRow style={{ height: 53 * emptyRows }}>
                             <TableCell colSpan={6} />

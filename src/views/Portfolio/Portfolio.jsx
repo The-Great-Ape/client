@@ -9,7 +9,8 @@ import PortfolioTable from './PortfolioTable';
 import PortfolioChart from './PortfolioChart';
 import { nu64, struct, u8, blob } from 'buffer-layout';
 import { publicKey, u128, u64 } from '@project-serum/borsh'
-import { TokenAmount, lt } from '../../lib/token/safe-math'
+import { TokenAmount, lt } from '../../lib/token/safe-math';
+import { getFarmByPoolId } from '../../lib/token/farms';
 
 import {
     PublicKey,
@@ -38,7 +39,7 @@ export const PortfolioView = () => {
         jsonrpc: "2.0",
         params: [
               "9KEPoZmtHUrBbhWN1v1KWLMkkvwY6WLtAVUCPRtRjP4z",
-              {"commitment":"confirmed","filters":[{"memcmp":{"offset":40,"bytes":"FDw92PNX4FtibvkDm7nd5XJUAg6ChTcVqMaFmG7kQ9JP"}},{"dataSize":96}],"encoding":"base64"}
+              {"commitment":"confirmed","filters":[{"memcmp":{"offset":40,"bytes":session.publicKey}},{"dataSize":96}],"encoding":"base64"}
         ],
         id: "84203270-a3eb-4812-96d7-0a3c40c87a88"
       };
@@ -62,6 +63,15 @@ export const PortfolioView = () => {
         return decoded;
   }
 
+  const fetchPairs = async () => {
+    const response = await fetch("https://api.raydium.io/pairs", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
+
+    const json = await response.json();
+    return json;
+  }
 
   const fetchBalances = async () => {
     const body = {
@@ -113,14 +123,13 @@ export const PortfolioView = () => {
   //Get Porfolio
   const getBalances = async () => {
 
-    let [priceData, portfolio, tokenMap, staked] = await Promise.all([fetchPriceList(), fetchBalances(), fetchTokenMap(), fetchStaked()]);
+    let [portfolio, staked, priceData, tokenMap, pairsData] = await Promise.all([fetchBalances(), fetchStaked(), fetchPriceList(), fetchTokenMap(), fetchPairs()]);
 
     //Parse portfolio
     portfolio = portfolio.map((token) => {
       var mint = token.account.data.parsed.info.mint;
       var balance = token.account.data.parsed.info.tokenAmount.uiAmount;
       var price = priceData.find(price => price.mint === token.account.data.parsed.info.mint);
-
       return {
         mint: mint,
         balance: balance,
@@ -134,17 +143,28 @@ export const PortfolioView = () => {
 
     //Parse
     staked = staked.map((stakeAccountInfo) => {
-        const stakeAccountAddress = stakeAccountInfo.publicKey.toBase58()
         const { data } = stakeAccountInfo.accountInfo
 
         const userStakeInfo = USER_STAKE_INFO_ACCOUNT_LAYOUT.decode(data)
-        const depositBalance = new TokenAmount(userStakeInfo.depositBalance.toNumber(), 6)
-        const pendingReward = new TokenAmount(userStakeInfo.rewardDebt.toNumber(), 6);
+        const poolId = userStakeInfo.poolId.toBase58()
+        const farm = getFarmByPoolId(poolId);
+
+        console.log(pairsData);
+        const pair = pairsData.find(pair => pair.name === farm.name);
+        
+        let balance = new TokenAmount(userStakeInfo.depositBalance.toNumber(), 6)
+        balance = parseFloat(balance.format());
+
+        let pendingReward = new TokenAmount(userStakeInfo.rewardDebt.toNumber(), 6);
+        pendingReward = parseFloat(pendingReward.format());
+
 
         return {
-            balance: parseFloat(depositBalance.format()),
-            pendingReward: parseFloat(pendingReward.format()),
-            tokenInfo: stakeAccountAddress
+            balance,
+            pendingReward,
+            tokenInfo: null,
+            value : pair.price * balance,
+            farmInfo: farm
         }
     });
     
