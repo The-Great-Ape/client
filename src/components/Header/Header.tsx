@@ -16,6 +16,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
+import Modal from '../Modal/Modal';
 
 import './Header.less';
 
@@ -136,12 +137,13 @@ export function Header(props: any) {
                     )}
                 </div>} */}
                 <div className="header-action">
-                    {(isConnected || !userId) && <Button
+                    {/* {(isConnected || !userId) && <Button
                         aria-controls={menuId}
                         aria-haspopup="true"
                         color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? handleProfileMenuOpen : handleClickOpen}>
                         {isConnected ? session && trimAddress(session.publicKey) : 'Connect'}
-                    </Button>}
+                    </Button>} */}
+                    <Modal />
                     <Menu
                         anchorEl={anchorEl}
                         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -155,7 +157,7 @@ export function Header(props: any) {
                     </Menu>
 
                     <SimpleDialog open={open} onClose={handleClose} />
-
+                    
                 </div>
             </Toolbar>
         </AppBar>
