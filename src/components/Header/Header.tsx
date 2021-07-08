@@ -143,7 +143,15 @@ export function Header(props: any) {
                         color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? handleProfileMenuOpen : handleClickOpen}>
                         {isConnected ? session && trimAddress(session.publicKey) : 'Connect'}
                     </Button>} */}
-                    <Modal />
+                    <Modal
+                    session={session}
+                    isConnected={isConnected}
+                    userId={userId}
+                    menuId='primary-search-account-menu'
+                    handleProfileMenuOpen={handleProfileMenuOpen}
+                    handleClickOpen={handleClickOpen}
+                    
+                    />
                     <Menu
                         anchorEl={anchorEl}
                         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
