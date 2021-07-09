@@ -59,7 +59,8 @@ export default function SimpleModal(props) {
       variant="contained"
       color="secondary"
       className={classes.button}
-      startIcon={<img alt="Phantom" width="20" height="20" src="https://www.phantom.app/img/logo.png" />}>
+      startIcon={<img alt="Phantom" width="20" height="20" src="https://www.phantom.app/img/logo.png" />}
+      onClick={isConnected ? handleProfileMenuOpen : handleClickOpen.bind(null, "phantom")}>
         
         Phantom
       </Button>
@@ -71,11 +72,11 @@ export default function SimpleModal(props) {
       color="secondary"
       className={classes.button}
       startIcon={<img alt="Sollet" width="20" height="20" src="https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg" />}
-      onClick={isConnected ? handleProfileMenuOpen : handleClickOpen}>
+      onClick={isConnected ? handleProfileMenuOpen : handleClickOpen.bind(null, "sollet")}>
         
         Sollet
       </Button>
-      <Button
+      {/* <Button
           aria-controls={menuId}
           aria-haspopup="true"
           title="Connect Ledger"
@@ -85,7 +86,7 @@ export default function SimpleModal(props) {
       startIcon={<img alt="Ledger" width="20" height="20" src="https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/ledger.svg" />}>
         
         Ledger
-      </Button>
+      </Button> */}
     </div>
   );
 

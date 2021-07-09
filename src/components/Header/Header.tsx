@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Wallet from '../../lib/wallet/Wallet';
+import PhantomWallet from '../../lib/wallet/Phantom';
 import { useSession } from "../../contexts/session";
 import { useLocation } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -59,6 +60,12 @@ export function Header(props: any) {
         await wallet.connect();
     }
 
+    async function connectPhantom() {
+        let wallet = new PhantomWallet();
+        wallet.onChange = (wallet: any) => onWalletConnect(wallet);
+        await wallet.connect();
+    }
+
     async function onWalletConnect(wallet: any){
         if(wallet){
             let session = await wallet.signMessage('$GRAPE');
@@ -73,11 +80,7 @@ export function Header(props: any) {
         window.location.href = "/"
     }
 
-    function trimAddress(addr: string) {
-        let start = addr.substring(0, 8);
-        let end = addr.substring(addr.length - 4);
-        return `${start}...${end}`;
-    }
+    
 
     //Menu
     const menuId = 'primary-search-account-menu';
@@ -90,8 +93,17 @@ export function Header(props: any) {
         setAnchorEl(null);
     };
 
-    const handleClickOpen = () => {
-        connect();
+    const handleClickOpen = (type: string) => {
+        switch(type) {
+            case "sollet":
+                connect();
+                break;
+            case "phantom":
+                connectPhantom();
+                break;
+            default:
+                break;
+        }
     };
 
     const handleClose = (value: any) => {
