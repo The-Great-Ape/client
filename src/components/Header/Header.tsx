@@ -93,7 +93,7 @@ export function Header(props: any) {
         setAnchorEl(null);
     };
 
-    const handleClickOpen = (type: string) => {
+    const handleClickOpen = (type: string, callback: any) => {
         switch(type) {
             case "sollet":
                 connect();
@@ -104,6 +104,7 @@ export function Header(props: any) {
             default:
                 break;
         }
+        callback && callback();
     };
 
     const handleClose = (value: any) => {
