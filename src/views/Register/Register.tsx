@@ -6,8 +6,10 @@ import Button from '@material-ui/core/Button';
 import { Box, Circle } from '../../components';
 import { useSession } from "../../contexts/session";
 import Wallet from '../../lib/wallet/Wallet';
+import PhantomWallet from '../../lib/wallet/Phantom';
 import User from '../../models/User';
 import './Register.less';
+import Modal from '../../components/Modal/Modal';
 
 function getParam(param: string) {
     return new URLSearchParams(document.location.search).get(param);
@@ -34,6 +36,14 @@ export function RegisterView(props: any) {
         await wallet.connect();
     }
 
+    async function registerPhantom() {
+        let wallet = new PhantomWallet();
+        wallet.onChange = (wallet: any) => onWalletRegister(wallet);
+
+        await wallet.connect();
+    }
+
+
     async function onWalletRegister(wallet: any){
         if(wallet){
             let session = await wallet.register('$GRAPE', userId);
@@ -49,6 +59,12 @@ export function RegisterView(props: any) {
         await wallet.connect();
     }
 
+    async function connectPhantom() {
+        let wallet = new PhantomWallet();
+        wallet.onChange = (wallet: any) => onWalletConnect(wallet);
+        await wallet.connect();
+    }
+
     async function onWalletConnect(wallet: any){
         if(wallet){
             let session = await wallet.signMessage('$GRAPE');
@@ -57,6 +73,34 @@ export function RegisterView(props: any) {
             }
         }
     }
+
+    const handleRegister = (type: string, callback: any) => {
+        switch(type) {
+            case "sollet":
+                register();
+                break;
+            case "phantom":
+                registerPhantom();
+                break;
+            default:
+                break;
+        }
+        callback && callback();
+    };
+
+    const handleConnect = (type: string, callback: any) => {
+        switch(type) {
+            case "sollet":
+                connect();
+                break;
+            case "phantom":
+                connectPhantom();
+                break;
+            default:
+                break;
+        }
+        callback && callback();
+    };
 
     useEffect(() => {
         setSession(null);
@@ -81,7 +125,16 @@ export function RegisterView(props: any) {
                 <br />
                 {!isAlreadyRegistered ? 
                 <div>
-                    {!isConnected ? <Button color="primary" size="large" variant="contained" onClick={register}>Link Wallet</Button> : 
+                    {!isConnected ? <Modal
+                    session={session}
+                    isConnected={isConnected}
+                    userId={userId}
+                    menuId='primary-search-account-menu'
+                    handleProfileMenuOpen={() => {}}
+                    handleClickOpen={handleRegister}
+                    buttonText="Link Wallet"
+                    
+                    /> : 
                     <div>Registered!<br /><br/>
                         <Link to='/'><Button color="primary" size="medium" variant="contained" title="Connect">Home</Button></Link>
                     </div>}
@@ -89,7 +142,16 @@ export function RegisterView(props: any) {
                 <div>
                      {!isConnected ? 
                          <div>Your wallet is already linked!<br /><br/>
-                     <Button color="primary" size="large" variant="contained" onClick={connect}>Connect</Button></div> : 
+                     <Modal
+                    session={session}
+                    isConnected={isConnected}
+                    userId={userId}
+                    menuId='primary-search-account-menu'
+                    handleProfileMenuOpen={() => {}}
+                    handleClickOpen={handleConnect}
+                    buttonText="Connect"
+                    
+                    /> </div>: 
                         <Link to='/'><Button color="primary" size="medium" variant="contained" title="Connect">Home</Button></Link>
                     }
                 </div>}

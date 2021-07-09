@@ -91,6 +91,43 @@ class PhantomAdapter extends EventEmitter {
 
     return new Session(session);
   };
+
+  register = async (token, userId) => {
+
+    const bytes = Buffer.from('$GRAPE');
+    const message = bs58.encode(bytes);
+    const signed = await this.instance.request({
+      method: "signTransaction",
+      params: { message },
+    });
+
+    signed.signature = bs58.decode(signed.signature);
+    const signature = signed.signature;
+    const publicKey = signed.publicKey;
+    const address = bs58.decode(signed.publicKey);
+
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+          userId,
+          token: token,
+          address,
+          publicKey,
+          signature
+      })
+    });
+
+
+    const session = await response.json();
+    session.token = {address, signature};
+    session.publicKey = publicKey;
+
+    return new Session(session);
+    
+  }
 }
 
 export default PhantomAdapter;

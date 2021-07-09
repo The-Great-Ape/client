@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleModal(props) {
-  const { session, isConnected, userId, menuId, handleProfileMenuOpen, handleClickOpen } = props;
+  const { session, isConnected, userId, menuId, handleProfileMenuOpen, handleClickOpen, buttonText } = props;
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -76,6 +76,18 @@ export default function SimpleModal(props) {
         
         Sollet
       </Button>
+      <Button
+          aria-controls={menuId}
+          aria-haspopup="true"
+          title="Connect Sollet"
+      variant="contained"
+      color="secondary"
+      className={classes.button}
+      startIcon={<img alt="Sollet" width="20" height="20" src="https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg" />}
+      onClick={isConnected ? handleProfileMenuOpen : handleClickOpen.bind(null, "sollet", handleClose)}>
+        
+        Sollet Extension
+      </Button>
       {/* <Button
           aria-controls={menuId}
           aria-haspopup="true"
@@ -104,7 +116,7 @@ export default function SimpleModal(props) {
           title="Connect"
           onClick={isConnected ? handleProfileMenuOpen : handleOpen}
           >
-          {isConnected ? session && trimAddress(session.publicKey) : 'Connect'}
+          {isConnected ? session && trimAddress(session.publicKey) : buttonText}
       </Button>}
       <Modal
         open={open}

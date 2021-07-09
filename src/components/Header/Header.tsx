@@ -163,6 +163,7 @@ export function Header(props: any) {
                     menuId='primary-search-account-menu'
                     handleProfileMenuOpen={handleProfileMenuOpen}
                     handleClickOpen={handleClickOpen}
+                    buttonText="Connect"
                     
                     />
                     <Menu
