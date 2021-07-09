@@ -107,7 +107,7 @@ export default function SimpleModal(props) {
       {/* <button type="button" onClick={handleOpen}>
         Open Modal
       </button> */}
-      {(isConnected || !userId) && <Button
+      <Button
           aria-controls={menuId}
           aria-haspopup="true"
           color="primary"
@@ -117,7 +117,7 @@ export default function SimpleModal(props) {
           onClick={isConnected ? handleProfileMenuOpen : handleOpen}
           >
           {isConnected ? session && trimAddress(session.publicKey) : buttonText}
-      </Button>}
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
