@@ -149,7 +149,7 @@ export function Header(props: any) {
                         <Link to={route.path} ><Button className={"header-menu-item " + (route.path === currPath ? "active" : "")}>{route.name}</Button></Link>
                     )}
                 </div>} */}
-                <div className="header-action">
+                {currPath !== "/register" && currPath !== "/start" && <div className="header-action">
                     {/* {(isConnected || !userId) && <Button
                         aria-controls={menuId}
                         aria-haspopup="true"
@@ -180,7 +180,7 @@ export function Header(props: any) {
 
                     <SimpleDialog open={open} onClose={handleClose} />
                     
-                </div>
+                </div>}
             </Toolbar>
         </AppBar>
     );
