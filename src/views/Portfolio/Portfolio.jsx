@@ -121,7 +121,7 @@ export const PortfolioView = () => {
 
   //Get Prices RPC
   const fetchPriceList = async () => {
-    const response = await fetch("https://price-api.sonar.watch/prices", {
+    const response = await fetch("https://verify.grapes.network/prices.json", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
