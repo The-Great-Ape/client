@@ -189,19 +189,25 @@ export const PortfolioView = () => {
     //Parse
     staked = staked.map((stakeAccountInfo) => {
         const { data } = stakeAccountInfo.accountInfo
-
         const userStakeInfo = USER_STAKE_INFO_ACCOUNT_LAYOUT.decode(data)
         const poolId = userStakeInfo.poolId.toBase58()
         const farm = getFarmByPoolId(poolId);
 
-        const pair = pairsData.find(pair => pair.name === farm.name);
+        if(!farm) {
+          return {
+            balance: 0
+          }
+        }
+
+        const pair = pairsData.find(pair => {
+          return pair.name === farm.name
+        });
         
         let balance = new TokenAmount(userStakeInfo.depositBalance.toNumber(), 6)
         balance = parseFloat(balance.format());
 
         let pendingReward = new TokenAmount(userStakeInfo.rewardDebt.toNumber(), 6);
         pendingReward = parseFloat(pendingReward.format());
-
 
         return {
             balance,
@@ -212,7 +218,7 @@ export const PortfolioView = () => {
         }
     }).filter((token) => {
         return token.balance > 0;
-      });;
+    });
     
     setBalances({
         portfolio,
