@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Wallet from '../../lib/wallet/Wallet';
+import PhantomWallet from '../../lib/wallet/Phantom';
 import { useSession } from "../../contexts/session";
 import { useLocation } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -16,6 +17,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
+import Modal from '../Modal/Modal';
 
 import './Header.less';
 
@@ -58,6 +60,12 @@ export function Header(props: any) {
         await wallet.connect();
     }
 
+    async function connectPhantom() {
+        let wallet = new PhantomWallet();
+        wallet.onChange = (wallet: any) => onWalletConnect(wallet);
+        await wallet.connect();
+    }
+
     async function onWalletConnect(wallet: any){
         if(wallet){
             let session = await wallet.signMessage('$GRAPE');
@@ -72,11 +80,7 @@ export function Header(props: any) {
         window.location.href = "/"
     }
 
-    function trimAddress(addr: string) {
-        let start = addr.substring(0, 8);
-        let end = addr.substring(addr.length - 4);
-        return `${start}...${end}`;
-    }
+    
 
     //Menu
     const menuId = 'primary-search-account-menu';
@@ -89,8 +93,18 @@ export function Header(props: any) {
         setAnchorEl(null);
     };
 
-    const handleClickOpen = () => {
-        connect();
+    const handleClickOpen = (type: string, callback: any) => {
+        switch(type) {
+            case "sollet":
+                connect();
+                break;
+            case "phantom":
+                connectPhantom();
+                break;
+            default:
+                break;
+        }
+        callback && callback();
     };
 
     const handleClose = (value: any) => {
@@ -135,13 +149,23 @@ export function Header(props: any) {
                         <Link to={route.path} ><Button className={"header-menu-item " + (route.path === currPath ? "active" : "")}>{route.name}</Button></Link>
                     )}
                 </div>} */}
-                <div className="header-action">
-                    {(isConnected || !userId) && <Button
+                {currPath !== "/register" && currPath !== "/start" && <div className="header-action">
+                    {/* {(isConnected || !userId) && <Button
                         aria-controls={menuId}
                         aria-haspopup="true"
                         color="primary" size="medium" variant="contained" title="Connect" onClick={isConnected ? handleProfileMenuOpen : handleClickOpen}>
                         {isConnected ? session && trimAddress(session.publicKey) : 'Connect'}
-                    </Button>}
+                    </Button>} */}
+                    <Modal
+                    session={session}
+                    isConnected={isConnected}
+                    userId={userId}
+                    menuId='primary-search-account-menu'
+                    handleProfileMenuOpen={handleProfileMenuOpen}
+                    handleClickOpen={handleClickOpen}
+                    buttonText="Connect"
+                    
+                    />
                     <Menu
                         anchorEl={anchorEl}
                         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -155,8 +179,8 @@ export function Header(props: any) {
                     </Menu>
 
                     <SimpleDialog open={open} onClose={handleClose} />
-
-                </div>
+                    
+                </div>}
             </Toolbar>
         </AppBar>
     );

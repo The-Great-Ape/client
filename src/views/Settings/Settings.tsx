@@ -98,7 +98,6 @@ export const SettingsView = () => {
               <TableHead>
                 <TableRow>
                   <TableCell align="left">Address</TableCell>
-                  <TableCell align="right">Provider</TableCell>
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -106,7 +105,6 @@ export const SettingsView = () => {
                 {wallets.map(wallet => {
                   return <TableRow key={'wallet1'}>
                     <TableCell component="th" scope="row">{wallet.address}</TableCell>
-                    <TableCell align="right">Sollet</TableCell>
                     <TableCell align="right">
                       <Button color="primary" size="small" variant="contained" title="Connect" disabled>Primary</Button>
                     </TableCell>
