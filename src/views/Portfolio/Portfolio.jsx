@@ -11,6 +11,8 @@ import { nu64, struct, u8, blob } from 'buffer-layout';
 import { publicKey, u128, u64 } from '@project-serum/borsh'
 import { TokenAmount, lt } from '../../lib/token/safe-math';
 import { getFarmByPoolId } from '../../lib/token/farms';
+import BigNumber from "bignumber.js";
+
 
 import {
     PublicKey,
