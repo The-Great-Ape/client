@@ -11,7 +11,10 @@ import { nu64, struct, u8, blob } from 'buffer-layout';
 import { publicKey, u128, u64 } from '@project-serum/borsh'
 import { TokenAmount, lt } from '../../lib/token/safe-math';
 import { getFarmByPoolId } from '../../lib/token/farms';
+<<<<<<< HEAD
 import BigNumber from "bignumber.js";
+=======
+>>>>>>> parent of 5136c3b (Update Portfolio.jsx)
 
 import {
     PublicKey,
