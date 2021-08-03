@@ -13,6 +13,7 @@ import { TokenAmount, lt } from '../../lib/token/safe-math';
 import { getFarmByPoolId } from '../../lib/token/farms';
 import BigNumber from "bignumber.js";
 
+
 import {
     PublicKey,
   } from '@solana/web3.js'
@@ -122,7 +123,7 @@ export const PortfolioView = () => {
 
   //Get Prices RPC
   const fetchPriceList = async () => {
-    const response = await fetch("https://price-api.sonar.watch/prices", {
+    const response = await fetch("https://verify.grapes.network/prices.json", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -204,13 +205,17 @@ export const PortfolioView = () => {
           return pair.name === farm.name
         });
         
-       let balance = new TokenAmount(userStakeInfo.depositBalance.toNumber(), 6)
-        balance = parseFloat(balance.format());
+      //  let balance = new TokenAmount(userStakeInfo.depositBalance.toNumber(), 6)
+      //  balance = parseFloat(balance.format());
 
         let pendingReward = new TokenAmount(userStakeInfo.rewardDebt.toNumber(), 6);
         pendingReward = parseFloat(pendingReward.format());
         
-     
+        let x =  BigNumber(userStakeInfo.depositBalance);
+         x=x.toString();
+       
+        x=x.substring(0,x.length-6)+"."+x.substring(x.length-6);
+		let balance=x;
         
 
         return {
