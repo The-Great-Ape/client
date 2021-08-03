@@ -1,7 +1,7 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Modal from "@material-ui/core/Modal";
+import Button from "@material-ui/core/Button";
 
 function getModalStyle() {
   const top = 50;
@@ -17,20 +17,27 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1, 0),
-    width: "100%"
+    width: "100%",
   },
   paper: {
-    position: 'absolute',
+    position: "absolute",
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
 }));
 
 export default function SimpleModal(props) {
-  const { session, isConnected, userId, menuId, handleProfileMenuOpen, handleClickOpen, buttonText } = props;
+  const {
+    session,
+    isConnected,
+    menuId,
+    handleProfileMenuOpen,
+    handleClickOpen,
+    buttonText,
+  } = props;
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -53,39 +60,72 @@ export default function SimpleModal(props) {
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <Button
-          aria-controls={menuId}
-          aria-haspopup="true"
-          title="Connect Phantom"
-      variant="contained"
-      color="secondary"
-      className={classes.button}
-      startIcon={<img alt="Phantom" width="20" height="20" src="https://www.phantom.app/img/logo.png" />}
-      onClick={isConnected ? handleProfileMenuOpen : handleClickOpen.bind(null, "phantom", handleClose)}>
-        
+        aria-controls={menuId}
+        aria-haspopup="true"
+        title="Connect Phantom"
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        startIcon={
+          <img
+            alt="Phantom"
+            width="20"
+            height="20"
+            src="https://www.phantom.app/img/logo.png"
+          />
+        }
+        onClick={
+          isConnected
+            ? handleProfileMenuOpen
+            : handleClickOpen.bind(null, "phantom", handleClose)
+        }
+      >
         Phantom
       </Button>
       <Button
-          aria-controls={menuId}
-          aria-haspopup="true"
-          title="Connect Sollet"
-      variant="contained"
-      color="secondary"
-      className={classes.button}
-      startIcon={<img alt="Sollet" width="20" height="20" src="https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg" />}
-      onClick={isConnected ? handleProfileMenuOpen : handleClickOpen.bind(null, "sollet", handleClose)}>
-        
+        aria-controls={menuId}
+        aria-haspopup="true"
+        title="Connect Sollet"
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        startIcon={
+          <img
+            alt="Sollet"
+            width="20"
+            height="20"
+            src="https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg"
+          />
+        }
+        onClick={
+          isConnected
+            ? handleProfileMenuOpen
+            : handleClickOpen.bind(null, "sollet", handleClose)
+        }
+      >
         Sollet
       </Button>
       <Button
-          aria-controls={menuId}
-          aria-haspopup="true"
-          title="Connect Sollet"
-      variant="contained"
-      color="secondary"
-      className={classes.button}
-      startIcon={<img alt="Sollet" width="20" height="20" src="https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg" />}
-      onClick={isConnected ? handleProfileMenuOpen : handleClickOpen.bind(null, "sollet", handleClose)}>
-        
+        aria-controls={menuId}
+        aria-haspopup="true"
+        title="Connect Sollet"
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        startIcon={
+          <img
+            alt="Sollet"
+            width="20"
+            height="20"
+            src="https://raw.githubusercontent.com/solana-labs/oyster/main/assets/wallets/sollet.svg"
+          />
+        }
+        onClick={
+          isConnected
+            ? handleProfileMenuOpen
+            : handleClickOpen.bind(null, "sollet", handleClose)
+        }
+      >
         Sollet Extension
       </Button>
       {/* <Button
@@ -108,15 +148,15 @@ export default function SimpleModal(props) {
         Open Modal
       </button> */}
       <Button
-          aria-controls={menuId}
-          aria-haspopup="true"
-          color="primary"
-          size="medium"
-          variant="contained"
-          title="Connect"
-          onClick={isConnected ? handleProfileMenuOpen : handleOpen}
-          >
-          {isConnected ? session && trimAddress(session.publicKey) : buttonText}
+        aria-controls={menuId}
+        aria-haspopup="true"
+        color="primary"
+        size="medium"
+        variant="contained"
+        title="Connect"
+        onClick={isConnected ? handleProfileMenuOpen : handleOpen}
+      >
+        {isConnected ? session && trimAddress(session.publicKey) : buttonText}
       </Button>
       <Modal
         open={open}

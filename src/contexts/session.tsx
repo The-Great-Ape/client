@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, useReducer } from 'react';
-import Session from '../models/Session';
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import Session from "../models/Session";
 
 //Initial state
-const LOCAL_STORAGE_KEY = 'grape-session';
+const LOCAL_STORAGE_KEY = "grape-session";
 // let grapeSession = localStorage.getItem(LOCAL_STORAGE_KEY);
 // if (grapeSession === "undefined") grapeSession = null;
 // let initialState = JSON.parse(grapeSession) || null;
@@ -13,7 +13,6 @@ const LOCAL_STORAGE_KEY = 'grape-session';
 const initialState = new Session(null);
 
 const localState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-
 
 //Reducer
 let reducer = (session: Session, newSession: Session) => {
@@ -27,11 +26,13 @@ let reducer = (session: Session, newSession: Session) => {
 
 //Context
 interface SessionContext {
-  session: Session,
-  setSession: React.Dispatch<any>
+  session: Session;
+  setSession: React.Dispatch<any>;
 }
 
-export const SessionContext = createContext<SessionContext>({} as SessionContext);
+export const SessionContext = createContext<SessionContext>(
+  {} as SessionContext
+);
 export const useSession = () => useContext(SessionContext);
 
 //Provider
@@ -46,5 +47,5 @@ export const SessionProvider: React.FC = ({ children }) => {
     <SessionContext.Provider value={{ session, setSession }}>
       {children}
     </SessionContext.Provider>
-  )
-}
+  );
+};

@@ -254,9 +254,7 @@ export const PortfolioView = () => {
   };
 
   //Get Balances
-  let total = 0;
   let portfolioTotal = 0;
-  let stakedTotal = 0;
 
   if (!balances) {
     getBalances();
@@ -265,12 +263,6 @@ export const PortfolioView = () => {
     portfolioTotal = balances.portfolio.reduce((acc, token) => {
       return acc + token.value;
     }, 0);
-
-    stakedTotal = balances.staked.reduce((acc, token) => {
-      return acc + token.value;
-    }, 0);
-
-    total = portfolioTotal + stakedTotal;
   }
 
   return (
