@@ -10,8 +10,8 @@ import { struct } from "buffer-layout";
 import { publicKey, u64 } from "@project-serum/borsh";
 import { TokenAmount } from "../../lib/token/safe-math";
 import { getFarmByPoolId } from "../../lib/token/farms";
-
 import { PublicKey } from "@solana/web3.js";
+import { callSerum } from "../../utils";
 
 const USER_STAKE_INFO_ACCOUNT_LAYOUT = struct([
   u64("state"),
@@ -27,31 +27,8 @@ export const PortfolioView = () => {
 
   //Get Balances RPC
   const fetchStaked = async () => {
-    const body = {
-      method: "getProgramAccounts",
-      jsonrpc: "2.0",
-      params: [
-        "9KEPoZmtHUrBbhWN1v1KWLMkkvwY6WLtAVUCPRtRjP4z",
-        {
-          commitment: "confirmed",
-          filters: [
-            { memcmp: { offset: 40, bytes: session.publicKey } },
-            { dataSize: 96 },
-          ],
-          encoding: "base64",
-        },
-      ],
-      id: "84203270-a3eb-4812-96d7-0a3c40c87a88",
-    };
-
-    const response = await fetch("https://solana-api.projectserum.com/", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const json = await response.json();
-    let decoded = json.result.map(
+    const data = await callSerum("staked", session.publicKey);
+    let decoded = data.result.map(
       ({ pubkey, account: { data, executable, owner, lamports } }) => ({
         publicKey: new PublicKey(pubkey),
         accountInfo: {
@@ -77,49 +54,14 @@ export const PortfolioView = () => {
   };
 
   const fetchBalances = async () => {
-    const body = {
-      method: "getTokenAccountsByOwner",
-      jsonrpc: "2.0",
-      params: [
-        // Get the public key of the account you want the balance for.
-        session.publicKey,
-        { programId: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" },
-        { encoding: "jsonParsed", commitment: "processed" },
-      ],
-      id: "35f0036a-3801-4485-b573-2bf29a7c77d2",
-    };
-
-    const response = await fetch("https://solana-api.projectserum.com/", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const json = await response.json();
-    const resultValues = json.result.value;
+    const data = await callSerum("balances", session.publicKey);
+    const resultValues = data.result.value;
     return resultValues;
   };
 
   const fetchSOLBalance = async () => {
-    const body = {
-      method: "getBalance",
-      jsonrpc: "2.0",
-      params: [
-        // Get the public key of the account you want the balance for.
-        session.publicKey,
-      ],
-      id: "35f0036a-3801-4485-b573-2bf29a7c77d2",
-    };
-
-    const response = await fetch("https://solana-api.projectserum.com/", {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const json = await response.json();
-    console.log(json);
-    const resultValues = json.result.value;
+    const data = await callSerum("solBalances", session.publicKey);
+    const resultValues = data.result.value;
     return resultValues;
   };
 
